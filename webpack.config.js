@@ -46,9 +46,16 @@ module.exports = {
     new MiniCssExtractPlugin(),
   ],
   devServer: {
-    static: {
-      directory: path.join(__dirname, 'dist'),
-    },
+    static: [
+      {
+        directory: path.join(__dirname, 'dist'),
+      },
+      {
+        directory: path.join(__dirname, 'static'),
+        publicPath: '/static',
+        watch: true,
+      },
+    ],
     hot: true,
     open: true,
     port: 8081,

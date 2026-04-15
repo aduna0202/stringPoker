@@ -271,8 +271,8 @@ var finalResults = new handResult();
 var dResults = new discardResult();
 //var getHolds = new autoHolder();
 
-var stringDeck = new dealerPerson(),
-  primaryDeck = new dealerPerson(),
+var stringDecks = [new dealerPerson(), new dealerPerson(), new dealerPerson()],
+  primaryDecks = [new dealerPerson(), new dealerPerson(), new dealerPerson()],
   stringPos = ["c2Pos", "c3Pos", "c4Pos"],
   cardPos = ["c1Pos", "c2Pos", "c3Pos", "c4Pos", "c5Pos"],
   cardHolds = cardPos.map((a, i) => {
@@ -383,19 +383,16 @@ export default {
         base_coin_cost: 1
       },
       holdReason: "",
-      stringCards: {
-        specs: stringDeck.stringCards,
-        flip: Array(3).fill(false),
-        deal: Array(3).fill(false),
-        held: Array(3).fill(true)
-      },
-      primaryCards: {
-        specs: primaryDeck.primaryCards,
-        deal: Array(5).fill(false),
-        flip: Array(5).fill(false),
-        held: Array(5).fill(false),
-        fade: Array(5).fill(false)
-      },
+      allStringCards: [
+        { specs: stringDecks[0].stringCards, flip: Array(3).fill(false), deal: Array(3).fill(false), held: Array(3).fill(true) },
+        { specs: stringDecks[1].stringCards, flip: Array(3).fill(false), deal: Array(3).fill(false), held: Array(3).fill(true) },
+        { specs: stringDecks[2].stringCards, flip: Array(3).fill(false), deal: Array(3).fill(false), held: Array(3).fill(true) }
+      ],
+      allPrimaryCards: [
+        { specs: primaryDecks[0].primaryCards, deal: Array(5).fill(false), flip: Array(5).fill(false), held: Array(5).fill(false), fade: Array(5).fill(false) },
+        { specs: primaryDecks[1].primaryCards, deal: Array(5).fill(false), flip: Array(5).fill(false), held: Array(5).fill(false), fade: Array(5).fill(false) },
+        { specs: primaryDecks[2].primaryCards, deal: Array(5).fill(false), flip: Array(5).fill(false), held: Array(5).fill(false), fade: Array(5).fill(false) }
+      ],
       discardedStringCard: "",
       cPos: cardPos,
       sPos: stringPos,
@@ -411,6 +408,14 @@ export default {
       holdHeldLabel: "HOLD",
       stringWinText: []
     };
+  },
+  computed: {
+    stringCards() {
+      return this.allStringCards[0];
+    },
+    primaryCards() {
+      return this.allPrimaryCards[0];
+    }
   },
   methods: {
     updateBonus() {
@@ -479,7 +484,7 @@ export default {
             this.reset(true);
             setTimeout(() => {               
               this.prepDeckAndShowStringCards(true);
-              primaryDeck.newDeck();
+              primaryDecks[0].newDeck();
             }, pause2);
           }, pause1);
         }, 200);
@@ -489,17 +494,17 @@ export default {
 
         setTimeout(() => {
           this.prepDeckAndShowStringCards();
-          primaryDeck.newDeck();
+          primaryDecks[0].newDeck();
         }, 900);
       } else {
         this.prepDeckAndShowStringCards();
-        primaryDeck.newDeck();
+        primaryDecks[0].newDeck();
       }
       this.playBtnSound();
     },
     prepDeckAndShowStringCards(skipStringDeal) {
       if (!skipStringDeal) {
-        stringDeck.newDeck();
+        stringDecks[0].newDeck();
       }
 
       this.stage.newRound = false;
@@ -560,7 +565,7 @@ export default {
           cardsRemoved++;
           setTimeout(() => {
             this.primaryCards.deal.splice(i, 1, false);
-            primaryDeck.swapCard(i);
+            primaryDecks[0].swapCard(i);
             this.playDealSound();
             bus.$emit("cardsUpdated", {
               newCard: this.primaryCards.specs[i],
@@ -667,7 +672,7 @@ export default {
           this.stringCards.deal.splice(newBonus.removeStringCardNum, 1, false);
           this.primaryCards.fade.splice(newBonus.pCardNumSwap, 1, true);
           setTimeout(() => {
-            this.discardedStringCard = stringDeck.upgradeStringCard(
+            this.discardedStringCard = stringDecks[0].upgradeStringCard(
               newBonus.removeStringCardNum,
               newBonus.pCardSwap
             );
@@ -738,7 +743,7 @@ export default {
       this.showWater = true;
       this.showWater2 = true;
       this.option.bestSlide = "";
-      primaryDeck.newDeck();
+      primaryDecks[0].newDeck();
       this.results.main = {};
       this.results.bonus = { reason: "" };
       this.stage.drawS2Cards = false;
@@ -778,7 +783,7 @@ export default {
       _.forEach(cards, (c, i, a) => {
         if (i <= a.length - 1) {
           if (this.stringCards.specs[c] === "") {
-            stringDeck.getCard(c, this.selectedString, "stringCards");
+            stringDecks[0].getCard(c, this.selectedString, "stringCards");
             bus.$emit("cardsUpdated", {
               newCard: this.stringCards.specs[i],
               cardNum: i,
@@ -820,8 +825,8 @@ export default {
       _.forEach(cards, (c, i, a) => {
         if (i <= a.length - 1) {
           if (this.primaryCards.specs[c] === "") {
-            primaryDeck.getCard(c, this.selectedPrimary, "primaryCards");
-            //  primaryDeck.getCard(c, [], "primaryCards");
+            primaryDecks[0].getCard(c, this.selectedPrimary, "primaryCards");
+            //  primaryDecks[0].getCard(c, [], "primaryCards");
           }
           bus.$emit("cardsUpdated", {
             newCard: this.primaryCards.specs[i],
