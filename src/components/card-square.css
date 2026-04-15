@@ -78,4 +78,17 @@
   .bCard4 {
     top: 71%;
   }
+
+  .cardArea.stringRow1.held { animation: moveUpRow1S 0.2s forwards; }
+  @keyframes moveUpRow1S {
+    0%   { top: 50%; animation-timing-function: ease-in; }
+    100% { top: 10%; }
+  }
+  .cardArea.stringRow2.held { animation: moveUpRow2S 0.2s forwards; }
+  @keyframes moveUpRow2S {
+    0%   { top: 50%; animation-timing-function: ease-in; }
+    100% { top: 0%;  }
+  }
+  .cardArea.primaryRow1 { top: 39%; }
+  .cardArea.primaryRow2 { top: 28%; }
 }

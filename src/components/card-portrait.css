@@ -24,7 +24,7 @@
       animation-timing-function: ease-in;
     }
     100% {
-      top: 55%;
+      top: 64%; /*moves string cards 0 up or down*/
     }
   }
   .unHeld {
@@ -45,10 +45,13 @@
     width: 100%;
     /*     top: 23.2%; */
   }
+
+  /* moves primary hand 0 up or down. */
   .cardArea {
-    top: 63.5%;
+    top: 68%;
     margin: 0 auto;
   }
+
   .holdArea {
     top: 35%;
     margin: 0 auto;
@@ -59,8 +62,20 @@
   .stringResultBonus {
     top: 54%;
   }
+  .stringResultBonus1 {
+    top: 47%;
+  }
+  .stringResultBonus2 {
+    top: 29%;
+  }
   .primaryHandResult {
     top: 59%;
+  }
+  .primaryHandResult1 {
+    top: 51%;
+  }
+  .primaryHandResult2 {
+    top: 33%;
   }
   .bCard1 {
     top: 50%;
@@ -74,4 +89,17 @@
   .bCard4 {
     top: 68%;
   }
+
+  .cardArea.stringRow1.held { animation: moveUpRow1P 0.2s forwards; }
+  @keyframes moveUpRow1P {
+    0%   { top: 56.5%; animation-timing-function: ease-in; }
+    100% { top: 47%; }
+  }
+  .cardArea.stringRow2.held { animation: moveUpRow2P 0.2s forwards; }
+  @keyframes moveUpRow2P {
+    0%   { top: 56.5%; animation-timing-function: ease-in; }
+    100% { top: 29%; }
+  }
+  .cardArea.primaryRow1 { top: 51%; }
+  .cardArea.primaryRow2 { top: 33%; }
 }

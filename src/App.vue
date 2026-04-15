@@ -1,57 +1,60 @@
 <template>
   <div class="fullScreen" :style="bgImg">
-      
+
     <pay-table v-on:updateBonus="updateBonus()" v-bind:baseBetValue="cash.coinValue * cash.base_coin_cost"></pay-table>
     <logo></logo>
     <menu-btns v-on:openInfo="openInfoBox"></menu-btns>
-    <info v-on:closeInfo="infoBoxOpen = false" :open="infoBoxOpen" ></info>
-    <cash-display v-bind:glow="stage.results || stage.newRound" v-on:updateBet="changeBet()" v-bind:cash="cash" v-on:playWin="playWinMsg()" v-on:endRound="endRound()" v-bind:showValue="stage.results || stage.showWin" v-bind:lockBet="stage.lockBet"></cash-display>
-    <water-mark1 :style="{'display': showWater2 ? 'block':'none'}"></water-mark1>
-    <water-mark2 :style="{'display': showWater ? 'block':'none'}"></water-mark2>
+    <info v-on:closeInfo="infoBoxOpen = false" :open="infoBoxOpen"></info>
+    <cash-display v-bind:glow="stage.results || stage.newRound" v-on:updateBet="changeBet()" v-bind:cash="cash"
+      v-on:playWin="playWinMsg()" v-on:endRound="endRound()" v-bind:showValue="stage.results || stage.showWin"
+      v-bind:lockBet="stage.lockBet"></cash-display>
+    <water-mark1 :style="{ 'display': showWater2 ? 'block' : 'none' }"></water-mark1>
+    <water-mark2 :style="{ 'display': showWater ? 'block' : 'none' }"></water-mark2>
     <water-mark3></water-mark3>
- 
-    <div class="cardArea stringCard" :style="{display:(newBonus && stage.newBonus) ? 'block' :'none' }">
+
+    <div class="cardArea stringCard" :style="{ display: (newBonus && stage.newBonus) ? 'block' : 'none' }">
       <div class="mainCards">
-      <div v-if="discardedStringCard !==''" class='cSize flip-container flip c5Pos fadeOut'>
-        <div class="flipper ">
-          <div class='back' :class="discardedStringCard"></div>
-        </div>
-        <div style="padding-top:42%; margin-left:-20%; text-align:center; position: absolute; width:140%;">
+        <div v-if="discardedStringCard !== ''" class='cSize flip-container flip c5Pos fadeOut'>
+          <div class="flipper ">
+            <div class='back' :class="discardedStringCard"></div>
+          </div>
+          <div style="padding-top:42%; margin-left:-20%; text-align:center; position: absolute; width:140%;">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30">
               <rect style="fill:#FFE401; stroke:#BB2601; stroke-width:3;" x="20" y="5" rx="5" width="60" height="20" />
               <text text-anchor="middle" font-weight="900" font-size="12" x="50" y="18.5" fill="#000000" opacity="1">
                 Discard</text>
             </svg>
+          </div>
         </div>
-      </div>
       </div>
     </div>
 
-    <div v-if="option.plusMode" id="note" class="cardArea stringCard" :style="{display:(results.bonus.counter > 0) ? 'block' :'none' }">
+    <div v-if="option.plusMode" id="note" class="cardArea stringCard"
+      :style="{ display: (results.bonus[0].counter > 0) ? 'block' : 'none' }">
       <div class="mainCards">
-      <div v-if="discardedStringCard !==''" class='cSize flip-container flip c1Pos'>
-        <div style="padding-top:0%; margin-left:-20%; text-align:center; position: absolute; width:140%;">
+        <div v-if="discardedStringCard !== ''" class='cSize flip-container flip c1Pos'>
+          <div style="padding-top:0%; margin-left:-20%; text-align:center; position: absolute; width:140%;">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80">
               <rect style="fill:#FFE401; stroke:#BB2601; stroke-width:3;" x="20" y="5" rx="5" width="60" height="70" />
               <text text-anchor="middle" font-weight="900" font-size="11" x="50" y="23" fill="#000000" opacity="1">
-                * PLUS {{results.bonus.counter}}</text>
+                * PLUS {{ results.bonus[0].counter }}</text>
               <text text-anchor="middle" font-weight="900" font-size="11" x="50" y="35" fill="#000000" opacity="1">
                 BONUS! </text>
               <text text-anchor="middle" font-weight="900" font-size="10" x="50" y="50" fill="#000000" opacity="1">
-               Repeated</text>
+                Repeated</text>
               <text text-anchor="middle" font-weight="900" font-size="10" x="50" y="60" fill="#000000" opacity="1">
-               string</text>
+                string</text>
               <text text-anchor="middle" font-weight="900" font-size="10" x="50" y="70" fill="#000000" opacity="1">
-               hand!</text>
+                hand!</text>
             </svg>
+          </div>
         </div>
       </div>
-      </div>
     </div>
-    <div id="newBonus" class="cardArea stringCard"  :style="{display:(!newBonus && stage.newBonus) ? 'block' :'none' }">
+    <div id="newBonus" class="cardArea stringCard" :style="{ display: (!newBonus && stage.newBonus) ? 'block' : 'none' }">
       <div class="mainCards">
-      <div class='cSize flip-container flip c5Pos'>
-        <div style="padding-top:30%; margin-left:-20%; text-align:center; position: absolute; width:140%;">
+        <div class='cSize flip-container flip c5Pos'>
+          <div style="padding-top:30%; margin-left:-20%; text-align:center; position: absolute; width:140%;">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 600">
               <rect style="fill:#FFE401; stroke:#BB2601; stroke-width:3;" x="20" y="5" rx="5" width="60" height="40" />
               <text text-anchor="middle" font-weight="900" font-size="12" x="50" y="21" fill="#000000" opacity="1">
@@ -59,60 +62,130 @@
               <text text-anchor="middle" font-weight="900" font-size="12" x="50" y="38.5" fill="#000000" opacity="1">
                 KEPT</text>
             </svg>
+          </div>
         </div>
-      </div>
       </div>
     </div>
 
 
-      <card v-for="(c,i) in stringCards0.deal" v-bind:cardPosition="sPos[i]" v-bind:showCard="c" v-bind:flip="stringCards0.flip[i]" v-bind:cardNum="i" v-bind:cardType="'stringCards'" v-bind:held="stringCards0.held[i]" v-bind:fadeOut="results.bonus.nonBonusCards" v-bind:cardBack="cardBack"></card>
-   
+    <card class="stringRow2" v-for="(c, i) in stringCards2.deal" v-bind:cardPosition="sPos[i]" v-bind:showCard="c"
+      v-bind:flip="stringCards2.flip[i]" v-bind:cardNum="i" v-bind:cardType="'stringCards2'"
+      v-bind:held="stringCards2.held[i]" v-bind:fadeOut="false" v-bind:cardBack="cardBack"></card>
+    <card class="primaryRow2" v-for="(c, i) in primaryCards2.deal" v-bind:cardPosition="cPos[i]" v-bind:showCard="c"
+      v-bind:flip="primaryCards2.flip[i]" v-bind:cardNum="i" v-bind:cardType="'primaryCards2'"
+      v-bind:held="primaryCards2.held[i]" v-bind:fadeOut="false" v-bind:cardBack="cardBack"></card>
 
 
+    <card class="stringRow1" v-for="(c, i) in stringCards1.deal" v-bind:cardPosition="sPos[i]" v-bind:showCard="c"
+      v-bind:flip="stringCards1.flip[i]" v-bind:cardNum="i" v-bind:cardType="'stringCards1'"
+      v-bind:held="stringCards1.held[i]" v-bind:fadeOut="false" v-bind:cardBack="cardBack"></card>
+    <card class="primaryRow1" v-for="(c, i) in primaryCards1.deal" v-bind:cardPosition="cPos[i]" v-bind:showCard="c"
+      v-bind:flip="primaryCards1.flip[i]" v-bind:cardNum="i" v-bind:cardType="'primaryCards1'"
+      v-bind:held="primaryCards1.held[i]" v-bind:fadeOut="false" v-bind:cardBack="cardBack"></card>
 
 
+    <card v-for="(c, i) in stringCards0.deal" v-bind:cardPosition="sPos[i]" v-bind:showCard="c"
+      v-bind:flip="stringCards0.flip[i]" v-bind:cardNum="i" v-bind:cardType="'stringCards'"
+      v-bind:held="stringCards0.held[i]" v-bind:fadeOut="results.bonus[0].nonBonusCards" v-bind:cardBack="cardBack"></card>
 
-     <div id="singleResult" class="singleResult stringResultBonus " v-if="results.bonus.bonus">
 
-      <div style="position:absolute; left: 14.8%; width: 60%;">
+    <!-- stringCards2 result label (UI_TEST: always visible for CSS adjustment) -->
+    <div class="singleResult stringResultBonus2" v-if="results.bonus[2].bonus">
+      <div class="resultLabel">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 60">
-          <rect :fill="results.bonus.fill" style="stroke:#bababa; stroke-miterlimit:10;" x="30" y="25" rx="2" width="105" height="10" />
-          <text v-if="results.bonus.bonus > 1" class="payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="70" y="32.5" fill="#ffffff">
-            {{results.bonus.label}}</text>        
-          <text v-if="results.bonus.bonus > 1" class="labelCash payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="120" y="32.5" fill="#02F53A">
-            ×{{results.bonus.bonus + results.bonus.counter}}{{results.bonus.plusOne}}</text>
-            <text v-if="results.bonus.bonus === 1" class="payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="82.5" y="32.5" fill="#ffffff">
-            {{results.bonus.label}}</text>      
+          <rect fill="#1a6b3a" style="stroke:#bababa; stroke-miterlimit:10;" x="30" y="25" rx="2" width="105" height="10" />
+          <text class="payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="70" y="32.5" fill="#ffffff">FLUSH</text>
+          <text class="labelCash payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="120" y="32.5" fill="#02F53A">×5</text>
         </svg>
       </div>
-    </div> 
+    </div>
 
-   <card v-for="(c,i) in primaryCards0.deal" v-bind:cardPosition="cPos[i]" v-bind:showCard="c" v-bind:flip="primaryCards0.flip[i]" v-bind:cardNum="i" v-bind:cardType="'primaryCards'" v-bind:held="primaryCards0.held[i]" v-bind:fadeOut="primaryCards0.fade[i]" v-bind:cardBack="cardBack"></card>
-  
+    <!-- primaryCards2 result label (UI_TEST: always visible for CSS adjustment) -->
+    <div class="singleResult primaryHandResult2" v-if="stage.results">
+      <div class="resultLabel">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 60">
+          <rect fill="#6b1a8f" style="stroke:#bababa; stroke-miterlimit:10;" x="30" y="25" rx="2" width="105" height="10" />
+          <text class="payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="70" y="32.5" fill="#ffffff">TWO PAIR</text>
+          <text class="labelCash payTableText" text-anchor="end" font-weight="bold" font-size="7" x="120" y="32.5" fill="#02F53A">$10</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- stringCards1 result label (UI_TEST: always visible for CSS adjustment) -->
+    <div class="singleResult stringResultBonus1"  v-if="results.bonus[1].bonus">
+      <div class="resultLabel">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 60">
+          <rect fill="#1a3a8f" style="stroke:#bababa; stroke-miterlimit:10;" x="30" y="25" rx="2" width="105" height="10" />
+          <text class="payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="70" y="32.5" fill="#ffffff">THREE OF A KIND</text>
+          <text class="labelCash payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="120" y="32.5" fill="#02F53A">×3</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- primaryCards1 result label (UI_TEST: always visible for CSS adjustment) -->
+    <div class="singleResult primaryHandResult1"  v-if="stage.results">
+      <div class="resultLabel">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 60">
+          <rect fill="#8f3a1a" style="stroke:#bababa; stroke-miterlimit:10;" x="30" y="25" rx="2" width="105" height="10" />
+          <text class="payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="70" y="32.5" fill="#ffffff">STRAIGHT</text>
+          <text class="labelCash payTableText" text-anchor="end" font-weight="bold" font-size="7" x="120" y="32.5" fill="#02F53A">$20</text>
+        </svg>
+      </div>
+    </div>
+
+    <div id="singleResult" class="singleResult stringResultBonus" v-if="results.bonus[0].bonus">
+
+      <div class="resultLabel">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 60">
+          <rect :fill="results.bonus[0].fill" style="stroke:#bababa; stroke-miterlimit:10;" x="30" y="25" rx="2"
+            width="105" height="10" />
+          <text v-if="results.bonus[0].bonus > 1" class="payTableText" text-anchor="middle" font-weight="bold"
+            font-size="7" x="70" y="32.5" fill="#ffffff">
+            {{ results.bonus[0].label }}</text>
+          <text v-if="results.bonus[0].bonus > 1" class="labelCash payTableText" text-anchor="middle" font-weight="bold"
+            font-size="7" x="120" y="32.5" fill="#02F53A">
+            ×{{ results.bonus[0].bonus + results.bonus[0].counter }}{{ results.bonus[0].plusOne }}</text>
+          <text v-if="results.bonus[0].bonus === 1" class="payTableText" text-anchor="middle" font-weight="bold"
+            font-size="7" x="82.5" y="32.5" fill="#ffffff">
+            {{ results.bonus[0].label }}</text>
+        </svg>
+      </div>
+    </div>
+
+
+
+    <card v-for="(c, i) in primaryCards0.deal" v-bind:cardPosition="cPos[i]" v-bind:showCard="c"
+      v-bind:flip="primaryCards0.flip[i]" v-bind:cardNum="i" v-bind:cardType="'primaryCards'"
+      v-bind:held="primaryCards0.held[i]" v-bind:fadeOut="primaryCards0.fade[i]" v-bind:cardBack="cardBack"></card>
+
 
     <div id="singleResult" class="singleResult primaryHandResult" v-if="stage.results">
 
-      <div style="position:absolute; left: 14.8%; width: 60%;">
+      <div class="resultLabel">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 60">
-          <rect :fill="results.main.fill" style="stroke:#bababa; stroke-miterlimit:10;" x="30" y="25" rx="2" width="105" height="10" />
-          <text v-if="results.main.rank > 0" class="payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="70" y="32.5" fill="#ffffff">
-            {{results.main.label}}</text>
-          <text v-if="results.main.rank === 0" class="payTableText" text-anchor="middle" font-weight="bold" font-size="8" x="82" y="32.5" fill="#ffffff">
-            {{results.main.label}}</text>
-          <text v-if="results.main.rank > 0" class="labelCash payTableText" text-anchor="end" font-weight="bold" font-size="7" x="120" y="32.5" fill="#02F53A">
-            {{dollarFormat(results.main.reward)}}</text>
+          <rect :fill="results.main[0].fill" style="stroke:#bababa; stroke-miterlimit:10;" x="30" y="25" rx="2" width="105"
+            height="10" />
+          <text v-if="results.main[0].rank > 0" class="payTableText" text-anchor="middle" font-weight="bold" font-size="7"
+            x="70" y="32.5" fill="#ffffff">
+            {{ results.main[0].label }}</text>
+          <text v-if="results.main[0].rank === 0" class="payTableText" text-anchor="middle" font-weight="bold"
+            font-size="8" x="82" y="32.5" fill="#ffffff">
+            {{ results.main[0].label }}</text>
+          <text v-if="results.main[0].rank > 0" class="labelCash payTableText" text-anchor="end" font-weight="bold"
+            font-size="7" x="120" y="32.5" fill="#02F53A">
+            {{ dollarFormat(results.main[0].reward) }}</text>
         </svg>
       </div>
-    </div> 
+    </div>
 
-      <div id="holdButtons" class="cardArea" >
+    <div id="holdButtons" class="cardArea">
       <div class="mainCards">
-        <div v-for="(hold,i) in holds" class="cSize" :class="hold.class" @click="updateHold(i)">
-           <div style="padding-top:42%; margin:0 auto; text-align:center; cursor:pointer;" v-if="hold.active">
+        <div v-for="(hold, i) in holds" class="cSize" :class="hold.class" @click="updateHold(i)">
+          <div style="padding-top:42%; margin:0 auto; text-align:center; cursor:pointer;" v-if="hold.active">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30">
               <rect style="fill:#FFE401; stroke:#BB2601; stroke-width:3;" x="20" y="5" rx="5" width="60" height="20" />
               <text text-anchor="middle" font-weight="900" font-size="15" x="50" y="20.5" fill="#000000" opacity="1">
-                {{holdHeldLabel}}</text>
+                {{ holdHeldLabel }}</text>
             </svg>
           </div>
 
@@ -120,48 +193,51 @@
       </div>
     </div>
 
-    <div id="deal" class="btnHeight" :style="{display: (stage.newRound || stage.keepPlaying) ? 'block': 'none'}" >
+    <div id="deal" class="btnHeight" :style="{ display: (stage.newRound || stage.keepPlaying) ? 'block' : 'none' }">
       <div class="btnBase" v-on:click="deal">
         <btn-right-deal></btn-right-deal>
       </div>
     </div>
 
-    <div id="draw" class="btnHeight" :style="{display: stage.primaryCardsDealt && !stage.drawS2Cards ? 'block': 'none'}">
+    <div id="draw" class="btnHeight"
+      :style="{ display: stage.primaryCardsDealt && !stage.drawS2Cards ? 'block' : 'none' }">
       <div class="btnBase" v-on:click="draw">
         <btn-right-draw></btn-right-draw>
       </div>
 
     </div>
 
-   <div class="changeBG" @click="changeBG()"></div>
+    <div class="changeBG" @click="changeBG()"></div>
 
-   <again v-if="stage.newGame"  v-on:deal="deal"></again>
-<keep-playing v-if="stage.keepPlaying" v-on:deal="deal"></keep-playing>
-<string-wins v-if="stage.keepPlaying || stage.roundEnds" v-bind:stringWinText="stringWinText"></string-wins>
-
-
-<!-- FOR TESTING (start) -->
+    <again v-if="stage.newGame" v-on:deal="deal"></again>
+    <keep-playing v-if="stage.keepPlaying" v-on:deal="deal"></keep-playing>
+    <string-wins v-if="stage.keepPlaying || stage.roundEnds" v-bind:stringWinText="stringWinText"></string-wins>
 
 
+    <!-- FOR TESTING (start) -->
 
-<!-- <button v-if="stage.results" @click="reset()" style="position:absolute; bottom:0%; width: 10rem; font-size:1rem; cursor: pointer;">
-            reset</button> --> 
 
-           <!--  <button @click="option.alwaysString = !option.alwaysString" style="position:absolute; bottom:0%; width: 10rem; font-size:1rem; cursor: pointer;">
+
+    <!-- <button v-if="stage.results" @click="reset()" style="position:absolute; bottom:0%; width: 10rem; font-size:1rem; cursor: pointer;">
+            reset</button> -->
+
+    <!--  <button @click="option.alwaysString = !option.alwaysString" style="position:absolute; bottom:0%; width: 10rem; font-size:1rem; cursor: pointer;">
             <span v-if="option.alwaysString">String mode</span>
             <span v-if="!option.alwaysString">Regular mode</span>
           
           </button>-->
 
-             <select v-model="selectedPrimary" style="position:absolute; bottom:0.5%; left: 0.5rem; width: 10rem;">
-            <option v-for="o in testScenarios" :value="o.cards">{{o.desc}}</option>
-          </select>
+    <select v-model="selectedPrimary" style="position:absolute; bottom:0.5%; left: 0.5rem; width: 10rem;">
+      <option v-for="o in testScenarios" :value="o.cards">{{ o.desc }}</option>
+    </select>
 
-          <select v-model="selectedString" style="position:absolute; bottom:0.5%; left: 11rem; width: 10rem;">
-            <option v-for="o in stringSecenarios" :value="o.cards">{{o.desc}}</option>
-          </select>
-<p v-if="results.bonus.reason !==''" style="position:absolute; bottom:1%; left:0%; font-size:1rem; background: lightyellow; padding:0.2em;"><b>Bonus pick reason:</b> {{results.bonus.reason}}</p>
-             <!-- 
+    <select v-model="selectedString" style="position:absolute; bottom:0.5%; left: 11rem; width: 10rem;">
+      <option v-for="o in stringSecenarios" :value="o.cards">{{ o.desc }}</option>
+    </select>
+    <p v-if="results.bonus[0].reason !== ''"
+      style="position:absolute; bottom:1%; left:0%; font-size:1rem; background: lightyellow; padding:0.2em;"><b>Bonus
+        pick reason:</b> {{ results.bonus[0].reason }}</p>
+    <!-- 
           
  <button @click="option.plusMode = !option.plusMode" style="position:absolute; bottom:0%; left: 32rem; width: 10rem; font-size:1rem; cursor: pointer; ">
             <span v-if="option.plusMode">☑</span>
@@ -170,7 +246,7 @@
             <span v-if="!option.plusMode"> is OFF</span>
             <span v-if="option.plusMode"> is ON</span>
           </button>  -->
-             <!--   
+    <!--   
           <div v-if="holdReason !== ''" style="position:absolute; bottom:0.5%; left: 20.5rem; font-size:1rem; cursor: pointer; color: lightyellow; background:  rgba(0, 0, 0, 0.5); padding: 0.5rem; padding-bottom: 0rem; ">
             <b>Hold reason: </b>
             {{holdReason}} 
@@ -178,11 +254,11 @@
 
           <div style="color: white; position:absolute; bottom:5%; left:10%; width: 50%; font-size:1.5rem; cursor: pointer;" v-if="option.bestSlide !== ''">
 <b>Best slide</b> <br> <span v-if="option.bestSlide === 'left'"><<<</span>  <span v-if="option.bestSlide === 'right'">>>></span>({{option.bestSlide}})</div> -->
-         
-       
 
 
-<!-- FOR TESTING (end) -->
+
+
+    <!-- FOR TESTING (end) -->
 
 
 
@@ -273,7 +349,7 @@ var dResults = new discardResult();
 
 var stringDecks = [new dealerPerson(), new dealerPerson(), new dealerPerson()],
   primaryDecks = [new dealerPerson(), new dealerPerson(), new dealerPerson()],
-  stringPos = ["c2Pos", "c3Pos", "c4Pos"],
+  stringPos = ["c1Pos", "c2Pos", "c3Pos"],
   cardPos = ["c1Pos", "c2Pos", "c3Pos", "c4Pos", "c5Pos"],
   cardHolds = cardPos.map((a, i) => {
     return {
@@ -351,7 +427,7 @@ export default {
         autoplay: false,
         bestSlide: "",
         alwaysString: false,
-        plusMode:false
+        plusMode: false
       },
       infoBoxOpen: false,
       stage: {
@@ -367,8 +443,8 @@ export default {
         keppPlaying: false,
         newGame: false,
         showWin: false,
-        lockBet:false,
-        roundEnds:false
+        lockBet: false,
+        roundEnds: false
       },
       /*  MDIndex: -1, */
       cash: {
@@ -377,7 +453,7 @@ export default {
         betWin: 100,
         win: 0,
         coinValue: 5,
-        coinOptions: [1,5, 10, 15, 25],
+        coinOptions: [1, 5, 10, 15, 25],
         activeCoinOption: 1,
         bonusCost: 4,
         base_coin_cost: 1
@@ -399,8 +475,8 @@ export default {
       labelPos: ["label1", "label2", "label3", "label4", "label5"],
       holds: cardHolds,
       results: {
-        main: {},
-        bonus: { counter: 0, reason: "" }
+        main: [{}, {}, {}],
+        bonus: [{ counter: 0, reason: "" }, {}, {}]
       },
       newBonus: false,
       bonusTable: 0,
@@ -481,20 +557,20 @@ export default {
         this.stage.newRound = false;
 
         setTimeout(() => {
-        //  console.log(this.results.bonus.bonus + (this.option.plusMode ? this.results.bonus.counter : 0), this.results.bonus.counter, this.results.bonus.bonus, this.option.plusMode );
+          //  console.log(this.results.bonus.bonus + (this.option.plusMode ? this.results.bonus.counter : 0), this.results.bonus.counter, this.results.bonus.bonus, this.option.plusMode );
 
           this.showNewBonus(
             autoPick.bestStringHand(
               this.primaryCards0.specs,
               this.stringCards0.specs,
-              this.results.bonus.bonus + (this.option.plusMode ? this.results.bonus.counter : 0)
+              this.results.bonus[0].bonus + (this.option.plusMode ? this.results.bonus[0].counter : 0)
             )
           );
           var pause1 = 4500,
             pause2 = 700;
           setTimeout(() => {
             this.reset(true);
-            setTimeout(() => {               
+            setTimeout(() => {
               this.prepDeckAndShowStringCards(true);
               primaryDecks[0].newDeck();
             }, pause2);
@@ -530,6 +606,8 @@ export default {
         for (let i = 0; i < this.stringCards0.specs.length; i++) {
           setTimeout(() => {
             this.stringCards0.deal.splice(i, 1, true);
+            this.stringCards1.deal.splice(i, 1, true);
+            this.stringCards2.deal.splice(i, 1, true);
             this.playDealSound();
 
             if (i === this.stringCards0.specs.length - 1) {
@@ -610,6 +688,8 @@ export default {
       for (let i = 0; i < 5; i++) {
         setTimeout(() => {
           this.primaryCards0.deal.splice(i, 1, true);
+          this.primaryCards1.deal.splice(i, 1, true);
+          this.primaryCards2.deal.splice(i, 1, true);
           this.playDealSound();
 
           if (i === this.primaryCards0.specs.length - 1) {
@@ -620,22 +700,22 @@ export default {
     },
 
     analyzeResults() {
-      this.results.main = finalResults.fiveCards(this.primaryCards0.specs);
-      this.results.main.reward =
+      this.results.main[0] = finalResults.fiveCards(this.primaryCards0.specs);
+      this.results.main[0].reward =
         this.cash.coinValue *
         this.cash.base_coin_cost *
-        this.results.main.payout;
+        this.results.main[0].payout;
 
       /*      console.log(
-        this.results.main.reward,
+        this.results.main[0].reward,
         this.cash.coinValue,
         this.cash.base_coin_cost,
-        this.results.main.payout,
-        this.results.bonus.bonus
+        this.results.main[0].payout,
+        this.results.bonus[0].bonus
       ); */
 
       this.stage.results = true;
-      if (this.results.main.reward > 0 || this.option.alwaysString) {
+      if (this.results.main[0].reward > 0 || this.option.alwaysString) {
         this.stage.keepPlaying = true;
         this.stage.lockBet = true;
         this.stage.showWin = true;
@@ -643,16 +723,16 @@ export default {
         this.stage.newGame = true;
         this.stage.newRound = true;
         this.stage.lockBet = false;
-     //   console.log(this.stringWinText);
+        //   console.log(this.stringWinText);
         this.stage.roundEnds = true;
         //  this.reset();
       }
 
       var currentWin =
-        this.results.main.reward *
-        (this.results.bonus.bonus + this.results.bonus.counter);
+        this.results.main[0].reward *
+        (this.results.bonus[0].bonus + this.results.bonus[0].counter);
 
-        
+
 
       this.cash.win = this.cash.win + currentWin;
 
@@ -669,16 +749,16 @@ export default {
         this.newBonus = true;
         var plusOne = "";
         // console.log(newBonus.bonus)
-        if (this.results.bonus.bonus === newBonus.bonus && newBonus.bonus > 1 && this.option.plusMode) {
-       
-          this.results.bonus.counter++;
+        if (this.results.bonus[0].bonus === newBonus.bonus && newBonus.bonus > 1 && this.option.plusMode) {
+
+          this.results.bonus[0].counter++;
           plusOne = "*";
-            // console.log('counter went up one!')
+          // console.log('counter went up one!')
         }
 
-        var bonusCounter = this.results.bonus.counter;
+        var bonusCounter = this.results.bonus[0].counter;
         //    console.log('bonusCounter',bonusCounter);
-        this.results.bonus = { plusOne: "" };
+        this.results.bonus[0] = { plusOne: "" };
 
         setTimeout(() => {
           this.stringCards0.deal.splice(newBonus.removeStringCardNum, 1, false);
@@ -697,21 +777,21 @@ export default {
 
             this.stringCards0.deal.splice(newBonus.removeStringCardNum, 1, true);
             setTimeout(() => {
-              this.results.bonus = newBonus;
+              this.results.bonus[0] = newBonus;
               if (plusOne !== "" && this.option.plusMode) {
-                this.results.bonus.plusOne = plusOne;
-                this.results.bonus.counter = bonusCounter;
+                this.results.bonus[0].plusOne = plusOne;
+                this.results.bonus[0].counter = bonusCounter;
               } else {
-                this.results.bonus.counter = 0;
+                this.results.bonus[0].counter = 0;
               }
-              //    console.log(' results.bonus.counter',  this.results.bonus.counter);
+              //    console.log(' results.bonus.counter',  this.results.bonus[0].counter);
 
               this.stage.newBonus = true;
             }, 500);
           }, 500);
         }, 1000);
       } else {
-        this.results.bonus.reason =
+        this.results.bonus[0].reason =
           "no equal or better bonus found - keeping the string cards!";
         this.newBonus = false;
         this.stage.newBonus = true;
@@ -721,6 +801,8 @@ export default {
       if (this.stage.primaryCardsDealt && !this.stage.results) {
         this.primaryCards0.held[i] = !this.primaryCards0.held[i];
         this.holds[i].active = !this.holds[i].active;
+        this.primaryCards1.flip.splice(i, 1, this.primaryCards0.held[i]);
+        this.primaryCards2.flip.splice(i, 1, this.primaryCards0.held[i]);
         this.playBtnSound();
       }
     },
@@ -744,6 +826,18 @@ export default {
           this.primaryCards0.fade.splice(i, 1, false);
           this.holds[i].active = false;
 
+          this.primaryCards1.specs.splice(i, 1, "");
+          this.primaryCards1.deal.splice(i, 1, false);
+          this.primaryCards1.held.splice(i, 1, false);
+          this.primaryCards1.flip.splice(i, 1, false);
+          this.primaryCards1.fade.splice(i, 1, false);
+
+          this.primaryCards2.specs.splice(i, 1, "");
+          this.primaryCards2.deal.splice(i, 1, false);
+          this.primaryCards2.held.splice(i, 1, false);
+          this.primaryCards2.flip.splice(i, 1, false);
+          this.primaryCards2.fade.splice(i, 1, false);
+
           this.stage.primaryCardsDealt = false;
           this.holdHeldLabel = "HOLD";
         }
@@ -756,8 +850,8 @@ export default {
       this.showWater2 = true;
       this.option.bestSlide = "";
       primaryDecks[0].newDeck();
-      this.results.main = {};
-      this.results.bonus = { reason: "" };
+      this.results.main = [{}, {}, {}];
+      this.results.bonus = [{ reason: "" }, {}, {}];
       this.stage.drawS2Cards = false;
       this.stage.dealPrimaryCards = false;
       this.stage.draw = false;
@@ -788,6 +882,16 @@ export default {
           this.stringCards0.deal.splice(i, 1, false);
           this.stringCards0.held.splice(i, 1, true);
           this.stringCards0.flip.splice(i, 1, false);
+
+          this.stringCards1.specs.splice(i, 1, "");
+          this.stringCards1.deal.splice(i, 1, false);
+          this.stringCards1.held.splice(i, 1, true);
+          this.stringCards1.flip.splice(i, 1, false);
+
+          this.stringCards2.specs.splice(i, 1, "");
+          this.stringCards2.deal.splice(i, 1, false);
+          this.stringCards2.held.splice(i, 1, true);
+          this.stringCards2.flip.splice(i, 1, false);
         }
       });
     },
@@ -797,18 +901,33 @@ export default {
           if (this.stringCards0.specs[c] === "") {
             stringDecks[0].getCard(c, this.selectedString, "stringCards");
             bus.$emit("cardsUpdated", {
-              newCard: this.stringCards0.specs[i],
-              cardNum: i,
+              newCard: this.stringCards0.specs[c],
+              cardNum: c,
               cardType: "stringCards"
             });
           }
+          // Mirror the same card into stringCards1 and stringCards2
+          this.stringCards1.specs.splice(c, 1, this.stringCards0.specs[c]);
+          this.stringCards2.specs.splice(c, 1, this.stringCards0.specs[c]);
+          bus.$emit("cardsUpdated", {
+            newCard: this.stringCards1.specs[c],
+            cardNum: c,
+            cardType: "stringCards1"
+          });
+          bus.$emit("cardsUpdated", {
+            newCard: this.stringCards2.specs[c],
+            cardNum: c,
+            cardType: "stringCards2"
+          });
           setTimeout(() => {
             this.stringCards0.flip.splice(c, 1, true);
+            this.stringCards1.flip.splice(c, 1, true);
+            this.stringCards2.flip.splice(c, 1, true);
 
             this.playFlipSound();
             if (i === a.length - 1) {
               /* ***** ongoing play var goes here. */
-             /*  console.log(this.cash.win, this.stage); */
+              /*  console.log(this.cash.win, this.stage); */
               var stringResults = dResults.threeCards(
                 this.stringCards0.specs,
                 this.bonusTable,
@@ -816,10 +935,10 @@ export default {
               );
               setTimeout(() => {
                 this.showWater = false;
-                this.results.bonus.bonus = stringResults.bonus;
-                this.results.bonus.counter = 0;
-                this.results.bonus.label = stringResults.label;
-                this.results.bonus.fill = stringResults.fill;
+                this.results.bonus[0].bonus = stringResults.bonus;
+                this.results.bonus[0].counter = 0;
+                this.results.bonus[0].label = stringResults.label;
+                this.results.bonus[0].fill = stringResults.fill;
                 //  console.log(stringResults);
                 setTimeout(() => {
                   this.dealPrimaryCards();
@@ -841,9 +960,22 @@ export default {
             //  primaryDecks[0].getCard(c, [], "primaryCards");
           }
           bus.$emit("cardsUpdated", {
-            newCard: this.primaryCards0.specs[i],
-            cardNum: i,
+            newCard: this.primaryCards0.specs[c],
+            cardNum: c,
             cardType: "primaryCards"
+          });
+          // Mirror card value into primaryCards1 and primaryCards2
+          this.primaryCards1.specs.splice(c, 1, this.primaryCards0.specs[c]);
+          this.primaryCards2.specs.splice(c, 1, this.primaryCards0.specs[c]);
+          bus.$emit("cardsUpdated", {
+            newCard: this.primaryCards1.specs[c],
+            cardNum: c,
+            cardType: "primaryCards1"
+          });
+          bus.$emit("cardsUpdated", {
+            newCard: this.primaryCards2.specs[c],
+            cardNum: c,
+            cardType: "primaryCards2"
           });
           setTimeout(() => {
             this.primaryCards0.flip.splice(c, 1, true);
@@ -892,7 +1024,7 @@ export default {
       var nopromise = {
         catch: new Function()
       };
-      (this.soundDeal.play() || nopromise).catch(function() {});
+      (this.soundDeal.play() || nopromise).catch(function () { });
     },
     playCashSound() {
       this.soundCash.pause();
@@ -900,7 +1032,7 @@ export default {
       var nopromise = {
         catch: new Function()
       };
-      (this.soundCash.play() || nopromise).catch(function() {});
+      (this.soundCash.play() || nopromise).catch(function () { });
     },
     playFlipSound() {
       this.soundDeal.pause();
@@ -908,7 +1040,7 @@ export default {
       var nopromise = {
         catch: new Function()
       };
-      (this.soundDeal.play() || nopromise).catch(function() {});
+      (this.soundDeal.play() || nopromise).catch(function () { });
     },
     playStarSound() {
       if (this.pDeal) {
@@ -917,7 +1049,7 @@ export default {
         var nopromise = {
           catch: new Function()
         };
-        (this.soundStar.play() || nopromise).catch(function() {});
+        (this.soundStar.play() || nopromise).catch(function () { });
       }
     },
     playBtnSound() {
@@ -926,7 +1058,7 @@ export default {
       var nopromise = {
         catch: new Function()
       };
-      (this.soundBtn.play() || nopromise).catch(function() {});
+      (this.soundBtn.play() || nopromise).catch(function () { });
     },
     playBetsPlease() {
       this.soundBets.pause();
@@ -934,7 +1066,7 @@ export default {
       var nopromise = {
         catch: new Function()
       };
-      (this.soundBets.play() || nopromise).catch(function() {});
+      (this.soundBets.play() || nopromise).catch(function () { });
     },
     playChipClick() {
       this.soundChip.pause();
@@ -942,7 +1074,7 @@ export default {
       var nopromise = {
         catch: new Function()
       };
-      (this.soundChip.play() || nopromise).catch(function() {});
+      (this.soundChip.play() || nopromise).catch(function () { });
     },
     playWinMsg() {
       this.soundPlayerWins.pause();
@@ -950,7 +1082,7 @@ export default {
       var nopromise = {
         catch: new Function()
       };
-      (this.soundPlayerWins.play() || nopromise).catch(function() {});
+      (this.soundPlayerWins.play() || nopromise).catch(function () { });
     },
     endRound() {
       this.soundEndRound.pause();
@@ -958,7 +1090,7 @@ export default {
       var nopromise = {
         catch: new Function()
       };
-      (this.soundEndRound.play() || nopromise).catch(function() {});
+      (this.soundEndRound.play() || nopromise).catch(function () { });
     },
     cycleBgImg() {
       setInterval(() => {
@@ -987,9 +1119,73 @@ export default {
           URL.substr(hashIndex + 1, URL.length) +
           '.png")';
       }
+    },
+
+    // UI_TEST: show all cards on load for CSS adjustments — comment out call in mounted() when done
+    showAllCardsForUITest() {
+      stringDecks[0].newDeck();
+      primaryDecks[0].newDeck();
+
+      // Deal and flip all string cards across all 3 visual layers
+      for (let c = 0; c < 3; c++) {
+        stringDecks[0].getCard(c, [], "stringCards");
+        this.stringCards1.specs.splice(c, 1, this.stringCards0.specs[c]);
+        this.stringCards2.specs.splice(c, 1, this.stringCards0.specs[c]);
+
+        bus.$emit("cardsUpdated", { newCard: this.stringCards0.specs[c], cardNum: c, cardType: "stringCards" });
+        bus.$emit("cardsUpdated", { newCard: this.stringCards1.specs[c], cardNum: c, cardType: "stringCards1" });
+        bus.$emit("cardsUpdated", { newCard: this.stringCards2.specs[c], cardNum: c, cardType: "stringCards2" });
+
+        this.stringCards0.deal.splice(c, 1, true);
+        this.stringCards1.deal.splice(c, 1, true);
+        this.stringCards2.deal.splice(c, 1, true);
+
+        this.stringCards0.flip.splice(c, 1, true);
+        this.stringCards1.flip.splice(c, 1, true);
+        this.stringCards2.flip.splice(c, 1, true);
+      }
+
+      // Deal and flip all primary cards across all 3 visual layers
+      for (let c = 0; c < 5; c++) {
+        primaryDecks[0].getCard(c, [], "primaryCards");
+        this.primaryCards1.specs.splice(c, 1, this.primaryCards0.specs[c]);
+        this.primaryCards2.specs.splice(c, 1, this.primaryCards0.specs[c]);
+
+        bus.$emit("cardsUpdated", { newCard: this.primaryCards0.specs[c], cardNum: c, cardType: "primaryCards" });
+        bus.$emit("cardsUpdated", { newCard: this.primaryCards1.specs[c], cardNum: c, cardType: "primaryCards1" });
+        bus.$emit("cardsUpdated", { newCard: this.primaryCards2.specs[c], cardNum: c, cardType: "primaryCards2" });
+
+        this.primaryCards0.deal.splice(c, 1, true);
+        this.primaryCards1.deal.splice(c, 1, true);
+        this.primaryCards2.deal.splice(c, 1, true);
+
+        this.primaryCards0.flip.splice(c, 1, true);
+        this.primaryCards1.flip.splice(c, 1, true);
+        this.primaryCards2.flip.splice(c, 1, true);
+      }
+
+      this.stage.primaryCardsDealt = true;
+
+      // Mock result labels for UI testing
+      this.results.bonus[0] = {
+        counter: 0,
+        reason: "",
+        bonus: 3,
+        label: "THREE OF A KIND",
+        fill: "#1a3a8f"
+      };
+      this.results.main[0] = {
+        rank: 1,
+        label: "FULL HOUSE",
+        fill: "#8f1a1a",
+        reward: 45,
+        payout: 9
+      };
+      this.stage.results = true;
     }
   },
   mounted() {
+   // this.showAllCardsForUITest(); // UI_TEST: comment this out when done adjusting CSS
     this.soundFlip = document.getElementById("soundFlip");
     this.soundClearCards = document.getElementById("soundClearCards");
     this.soundDeal = document.getElementById("dSoundDeal");
@@ -1084,6 +1280,12 @@ body {
 
 .labelCash {
   fill: #02f53a !important;
+}
+
+.resultLabel {
+  position: absolute;
+  left: 40%;
+  width: 60%;
 }
 
 /* .changeBonus {
