@@ -65,7 +65,7 @@
     </div>
 
 
-      <card v-for="(c,i) in stringCards.deal" v-bind:cardPosition="sPos[i]" v-bind:showCard="c" v-bind:flip="stringCards.flip[i]" v-bind:cardNum="i" v-bind:cardType="'stringCards'" v-bind:held="stringCards.held[i]" v-bind:fadeOut="results.bonus.nonBonusCards" v-bind:cardBack="cardBack"></card>
+      <card v-for="(c,i) in stringCards0.deal" v-bind:cardPosition="sPos[i]" v-bind:showCard="c" v-bind:flip="stringCards0.flip[i]" v-bind:cardNum="i" v-bind:cardType="'stringCards'" v-bind:held="stringCards0.held[i]" v-bind:fadeOut="results.bonus.nonBonusCards" v-bind:cardBack="cardBack"></card>
    
 
 
@@ -87,7 +87,7 @@
       </div>
     </div> 
 
-   <card v-for="(c,i) in primaryCards.deal" v-bind:cardPosition="cPos[i]" v-bind:showCard="c" v-bind:flip="primaryCards.flip[i]" v-bind:cardNum="i" v-bind:cardType="'primaryCards'" v-bind:held="primaryCards.held[i]" v-bind:fadeOut="primaryCards.fade[i]" v-bind:cardBack="cardBack"></card>
+   <card v-for="(c,i) in primaryCards0.deal" v-bind:cardPosition="cPos[i]" v-bind:showCard="c" v-bind:flip="primaryCards0.flip[i]" v-bind:cardNum="i" v-bind:cardType="'primaryCards'" v-bind:held="primaryCards0.held[i]" v-bind:fadeOut="primaryCards0.fade[i]" v-bind:cardBack="cardBack"></card>
   
 
     <div id="singleResult" class="singleResult primaryHandResult" v-if="stage.results">
@@ -410,11 +410,23 @@ export default {
     };
   },
   computed: {
-    stringCards() {
+    stringCards0() {
       return this.allStringCards[0];
     },
-    primaryCards() {
+    stringCards1() {
+      return this.allStringCards[1];
+    },
+    stringCards2() {
+      return this.allStringCards[2];
+    },
+    primaryCards0() {
       return this.allPrimaryCards[0];
+    },
+    primaryCards1() {
+      return this.allPrimaryCards[1];
+    },
+    primaryCards2() {
+      return this.allPrimaryCards[2];
     }
   },
   methods: {
@@ -473,8 +485,8 @@ export default {
 
           this.showNewBonus(
             autoPick.bestStringHand(
-              this.primaryCards.specs,
-              this.stringCards.specs,
+              this.primaryCards0.specs,
+              this.stringCards0.specs,
               this.results.bonus.bonus + (this.option.plusMode ? this.results.bonus.counter : 0)
             )
           );
@@ -515,12 +527,12 @@ export default {
       if (!skipStringDeal) {
         this.cash.balance = this.cash.balance - this.cash.totalBet;
 
-        for (let i = 0; i < this.stringCards.specs.length; i++) {
+        for (let i = 0; i < this.stringCards0.specs.length; i++) {
           setTimeout(() => {
-            this.stringCards.deal.splice(i, 1, true);
+            this.stringCards0.deal.splice(i, 1, true);
             this.playDealSound();
 
-            if (i === this.stringCards.specs.length - 1) {
+            if (i === this.stringCards0.specs.length - 1) {
               this.flipStringCards(300, [0, 1, 2], false);
             }
           }, i * 200);
@@ -549,7 +561,7 @@ export default {
         totalRemove = 0,
         removedCardsIndex = [];
 
-      this.primaryCards.held.forEach((held, i, a) => {
+      this.primaryCards0.held.forEach((held, i, a) => {
         if (i === 0) {
           a.forEach(b => {
             if (!b) {
@@ -564,17 +576,17 @@ export default {
         if (!held) {
           cardsRemoved++;
           setTimeout(() => {
-            this.primaryCards.deal.splice(i, 1, false);
+            this.primaryCards0.deal.splice(i, 1, false);
             primaryDecks[0].swapCard(i);
             this.playDealSound();
             bus.$emit("cardsUpdated", {
-              newCard: this.primaryCards.specs[i],
+              newCard: this.primaryCards0.specs[i],
               cardNum: i,
               cardType: "primaryCards"
             });
 
             setTimeout(() => {
-              this.primaryCards.flip.splice(i, 1, false);
+              this.primaryCards0.flip.splice(i, 1, false);
             }, 100);
           }, 200 * cardsRemoved);
           removedCardsIndex.push(i);
@@ -584,7 +596,7 @@ export default {
       setTimeout(() => {
         removedCardsIndex.forEach((cardIndexNum, i, a) => {
           setTimeout(() => {
-            this.primaryCards.deal.splice(cardIndexNum, 1, true);
+            this.primaryCards0.deal.splice(cardIndexNum, 1, true);
             this.playDealSound();
 
             if (i === a.length - 1) {
@@ -597,10 +609,10 @@ export default {
     dealPrimaryCards(ongoingGame) {
       for (let i = 0; i < 5; i++) {
         setTimeout(() => {
-          this.primaryCards.deal.splice(i, 1, true);
+          this.primaryCards0.deal.splice(i, 1, true);
           this.playDealSound();
 
-          if (i === this.primaryCards.specs.length - 1) {
+          if (i === this.primaryCards0.specs.length - 1) {
             this.flipPrimaryCards(300, [0, 1, 2, 3, 4], false, ongoingGame);
           }
         }, i * 200);
@@ -608,7 +620,7 @@ export default {
     },
 
     analyzeResults() {
-      this.results.main = finalResults.fiveCards(this.primaryCards.specs);
+      this.results.main = finalResults.fiveCards(this.primaryCards0.specs);
       this.results.main.reward =
         this.cash.coinValue *
         this.cash.base_coin_cost *
@@ -669,8 +681,8 @@ export default {
         this.results.bonus = { plusOne: "" };
 
         setTimeout(() => {
-          this.stringCards.deal.splice(newBonus.removeStringCardNum, 1, false);
-          this.primaryCards.fade.splice(newBonus.pCardNumSwap, 1, true);
+          this.stringCards0.deal.splice(newBonus.removeStringCardNum, 1, false);
+          this.primaryCards0.fade.splice(newBonus.pCardNumSwap, 1, true);
           setTimeout(() => {
             this.discardedStringCard = stringDecks[0].upgradeStringCard(
               newBonus.removeStringCardNum,
@@ -683,7 +695,7 @@ export default {
               cardType: "stringCards"
             });
 
-            this.stringCards.deal.splice(newBonus.removeStringCardNum, 1, true);
+            this.stringCards0.deal.splice(newBonus.removeStringCardNum, 1, true);
             setTimeout(() => {
               this.results.bonus = newBonus;
               if (plusOne !== "" && this.option.plusMode) {
@@ -707,7 +719,7 @@ export default {
     },
     updateHold(i) {
       if (this.stage.primaryCardsDealt && !this.stage.results) {
-        this.primaryCards.held[i] = !this.primaryCards.held[i];
+        this.primaryCards0.held[i] = !this.primaryCards0.held[i];
         this.holds[i].active = !this.holds[i].active;
         this.playBtnSound();
       }
@@ -725,11 +737,11 @@ export default {
       this.stage.results = false;
       setTimeout(() => {
         for (let i = 0; i < 5; i++) {
-          this.primaryCards.specs.splice(i, 1, "");
-          this.primaryCards.deal.splice(i, 1, false);
-          this.primaryCards.held.splice(i, 1, false);
-          this.primaryCards.flip.splice(i, 1, false);
-          this.primaryCards.fade.splice(i, 1, false);
+          this.primaryCards0.specs.splice(i, 1, "");
+          this.primaryCards0.deal.splice(i, 1, false);
+          this.primaryCards0.held.splice(i, 1, false);
+          this.primaryCards0.flip.splice(i, 1, false);
+          this.primaryCards0.fade.splice(i, 1, false);
           this.holds[i].active = false;
 
           this.stage.primaryCardsDealt = false;
@@ -772,33 +784,33 @@ export default {
 
       setTimeout(() => {
         for (let i = 0; i < 3; i++) {
-          this.stringCards.specs.splice(i, 1, "");
-          this.stringCards.deal.splice(i, 1, false);
-          this.stringCards.held.splice(i, 1, true);
-          this.stringCards.flip.splice(i, 1, false);
+          this.stringCards0.specs.splice(i, 1, "");
+          this.stringCards0.deal.splice(i, 1, false);
+          this.stringCards0.held.splice(i, 1, true);
+          this.stringCards0.flip.splice(i, 1, false);
         }
       });
     },
     flipStringCards(initialDelay, cards) {
       _.forEach(cards, (c, i, a) => {
         if (i <= a.length - 1) {
-          if (this.stringCards.specs[c] === "") {
+          if (this.stringCards0.specs[c] === "") {
             stringDecks[0].getCard(c, this.selectedString, "stringCards");
             bus.$emit("cardsUpdated", {
-              newCard: this.stringCards.specs[i],
+              newCard: this.stringCards0.specs[i],
               cardNum: i,
               cardType: "stringCards"
             });
           }
           setTimeout(() => {
-            this.stringCards.flip.splice(c, 1, true);
+            this.stringCards0.flip.splice(c, 1, true);
 
             this.playFlipSound();
             if (i === a.length - 1) {
               /* ***** ongoing play var goes here. */
              /*  console.log(this.cash.win, this.stage); */
               var stringResults = dResults.threeCards(
-                this.stringCards.specs,
+                this.stringCards0.specs,
                 this.bonusTable,
                 false
               );
@@ -824,17 +836,17 @@ export default {
       //    console.log('ongoingGame?',ongoingGame);
       _.forEach(cards, (c, i, a) => {
         if (i <= a.length - 1) {
-          if (this.primaryCards.specs[c] === "") {
+          if (this.primaryCards0.specs[c] === "") {
             primaryDecks[0].getCard(c, this.selectedPrimary, "primaryCards");
             //  primaryDecks[0].getCard(c, [], "primaryCards");
           }
           bus.$emit("cardsUpdated", {
-            newCard: this.primaryCards.specs[i],
+            newCard: this.primaryCards0.specs[i],
             cardNum: i,
             cardType: "primaryCards"
           });
           setTimeout(() => {
-            this.primaryCards.flip.splice(c, 1, true);
+            this.primaryCards0.flip.splice(c, 1, true);
 
             this.playFlipSound();
             if (i === a.length - 1) {

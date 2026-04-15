@@ -1,0 +1,77 @@
+@media all and (max-aspect-ratio: 520 / 600) {
+  /*PORTRAIT MODE*/
+
+  .changeBG {
+    right: 0.2rem;
+  }
+
+  .label {
+    width: 66%;
+    left: 22.5%;
+  }
+
+.stringCard{
+ top: 36.5% !important;
+}
+
+  .held {
+    animation: moveUp 0.2s forwards;
+  }
+
+  @keyframes moveUp {
+    0% {
+      top: 56.5%;
+      animation-timing-function: ease-in;
+    }
+    100% {
+      top: 55%;
+    }
+  }
+  .unHeld {
+    animation: moveDown 0.2s forwards;
+  }
+
+  @keyframes moveDown {
+    0% {
+      top: 55%;
+      animation-timing-function: ease-in;
+    }
+    100% {
+      top: 59.5%;
+    }
+  }
+
+  .mainCards {
+    width: 100%;
+    /*     top: 23.2%; */
+  }
+  .cardArea {
+    top: 63.5%;
+    margin: 0 auto;
+  }
+  .holdArea {
+    top: 35%;
+    margin: 0 auto;
+  }
+  .singleResult {
+    margin: 0 auto;
+  }
+  .stringResultBonus {
+    top: 54%;
+  }
+  .primaryHandResult {
+    top: 59%;
+  }
+  .bCard1 {
+    top: 50%;
+  }
+  .bCard2 {
+    top: 56%;
+  }
+  .bCard3 {
+    top: 62%;
+  }
+  .bCard4 {
+    top: 68%;
+  }
+}

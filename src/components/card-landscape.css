@@ -1,0 +1,92 @@
+@media all and (min-aspect-ratio: 970 / 600) {
+  /*LANDSCAPE MODE*/
+
+  .changeBG {
+    right: 0.2rem;
+  }
+  .rSlide1 {
+    animation: moveRight1 0.8s forwards;
+  }
+  .rSlide2 {
+    animation: moveRight2 0.8s forwards;
+  }
+  .rSlide3 {
+    animation: moveRight3 0.8s forwards;
+  }
+  .label {
+    width: 36%;
+    left: 35.5%;
+  }
+  .mainCards {
+    width: 56%;
+  }
+  .singleResult,
+  .cardArea,
+  .holdArea {
+    margin: 0 auto;
+  }
+
+  /*   .singleResult {
+    top: 24%;
+  } */
+
+  .stringResultBonus {
+    top: 25%;
+  }
+  .primaryHandResult {
+    top: 60%;
+  }
+
+  .cardArea {
+    top: 60%;
+  }
+
+  .holdArea {
+    top: 25%;
+  }
+
+.stringCard{
+top: 25% !important;
+}
+
+  .held {
+    animation: moveUp 0.2s forwards;
+  }
+
+  @keyframes moveUp {
+    0% {
+      top: 60%;
+      animation-timing-function: ease-in;
+    }
+    100% {
+      top: 25%;
+      animation-timing-function: ease-in;
+    }
+  }
+  .unHeld {
+    animation: moveDown 0.2s forwards;
+  }
+
+  @keyframes moveDown {
+    0% {
+      top: 25%;
+      animation-timing-function: ease-in;
+    }
+    100% {
+      top: 60%;
+    }
+  }
+
+  .bCard1 {
+    top: 48%;
+  }
+  .bCard2 {
+    top: 57%;
+  }
+  .bCard3 {
+    top: 66%;
+  }
+  .bCard4 {
+    top: 75%;
+  }
+}

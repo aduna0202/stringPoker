@@ -1,0 +1,81 @@
+@media all and (max-aspect-ratio: 970 / 600) and (min-aspect-ratio: 520 / 600) {
+  /*SQUARE (DESKTOP) MODE*/
+
+  .changeBG {
+    left: 0.2rem;
+  }
+
+  .label {
+    width: 53%;
+    left: 28.725%;
+  }
+
+  .mainCards {
+    width: 80%;
+    /*   top: 30%; */
+  }
+
+  .cardArea {
+    top: 50%;
+    left: -10%;
+  }
+  .holdArea {
+    top: 20%;
+    left: -10%;
+  }
+
+.stringCard{
+ top: 20% !important;
+}
+
+  .held {
+    animation: moveUp 0.2s forwards;
+  }
+
+  @keyframes moveUp {
+    0% {
+      top: 50%;
+      animation-timing-function: ease-in;
+    }
+    100% {
+      top: 20%;
+    }
+  }
+  .unHeld {
+    animation: moveDown 0.2s forwards;
+  }
+
+  @keyframes moveDown {
+    0% {
+      top: 20%;
+      animation-timing-function: ease-in;
+    }
+    100% {
+      top: 50%;
+    }
+  }
+
+  .singleResult {
+    left: -10%;
+  }
+
+  .stringResultBonus {
+    top: 18%;
+  }
+  .primaryHandResult {
+    top: 56%;
+  }
+
+  .bCard1 {
+    top: 44%;
+  }
+  .bCard2 {
+    top: 53%;
+  }
+  .bCard3 {
+    top: 62%;
+  }
+  .bCard4 {
+    top: 71%;
+  }
+}
