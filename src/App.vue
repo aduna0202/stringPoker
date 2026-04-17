@@ -5,8 +5,8 @@
     <logo></logo>
     <menu-btns v-on:openInfo="openInfoBox"></menu-btns>
     <info v-on:closeInfo="infoBoxOpen = false" :open="infoBoxOpen"></info>
-    <cash-display v-bind:glow="stage.results || stage.newRound" v-on:updateBet="changeBet()" v-bind:cash="cash"
-      v-on:playWin="playWinMsg()" v-on:endRound="endRound()" v-bind:showValue="stage.results || stage.showWin"
+    <cash-display v-bind:glow="stage.results[0] || stage.newRound" v-on:updateBet="changeBet()" v-bind:cash="cash"
+      v-on:playWin="playWinMsg()" v-on:endRound="endRound()" v-bind:showValue="stage.results[0] || stage.showWin"
       v-bind:lockBet="stage.lockBet"></cash-display>
     <water-mark1 :style="{ 'display': showWater2 ? 'block' : 'none' }"></water-mark1>
     <water-mark2 :style="{ 'display': showWater ? 'block' : 'none' }"></water-mark2>
@@ -101,8 +101,8 @@
     </div>
 
     <!-- primaryCards2 result label (UI_TEST: always visible for CSS adjustment) -->
-    <div class="singleResult primaryHandResult2" v-if="stage.results">
-      <div class="resultLabel">
+    <div class="singleResult primaryHandResult2" v-if="stage.results[2]">
+      <div class="primaryResultLabel">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 60">
           <rect fill="#6b1a8f" style="stroke:#bababa; stroke-miterlimit:10;" x="30" y="25" rx="2" width="105" height="10" />
           <text class="payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="70" y="32.5" fill="#ffffff">TWO PAIR</text>
@@ -123,8 +123,8 @@
     </div>
 
     <!-- primaryCards1 result label (UI_TEST: always visible for CSS adjustment) -->
-    <div class="singleResult primaryHandResult1"  v-if="stage.results">
-      <div class="resultLabel">
+    <div class="singleResult primaryHandResult1"  v-if="stage.results[1]">
+      <div class="primaryResultLabel">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 60">
           <rect fill="#8f3a1a" style="stroke:#bababa; stroke-miterlimit:10;" x="30" y="25" rx="2" width="105" height="10" />
           <text class="payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="70" y="32.5" fill="#ffffff">STRAIGHT</text>
@@ -159,9 +159,9 @@
       v-bind:held="primaryCards0.held[i]" v-bind:fadeOut="primaryCards0.fade[i]" v-bind:cardBack="cardBack"></card>
 
 
-    <div id="singleResult" class="singleResult primaryHandResult" v-if="stage.results">
+    <div id="singleResult" class="singleResult primaryHandResult" v-if="stage.results[0]">
 
-      <div class="resultLabel">
+      <div class="primaryResultLabel">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 60">
           <rect :fill="results.main[0].fill" style="stroke:#bababa; stroke-miterlimit:10;" x="30" y="25" rx="2" width="105"
             height="10" />
@@ -211,7 +211,9 @@
 
     <again v-if="stage.newGame" v-on:deal="deal"></again>
     <keep-playing v-if="stage.keepPlaying" v-on:deal="deal"></keep-playing>
-    <string-wins v-if="stage.keepPlaying || stage.roundEnds" v-bind:stringWinText="stringWinText"></string-wins>
+    <string-wins class="stringWin0" v-if="stage.keepPlaying || stage.roundEnds" v-bind:stringWinText="stringWinText[0]"></string-wins>
+    <string-wins class="stringWin1" v-if="stage.keepPlaying || stage.roundEnds" v-bind:stringWinText="stringWinText[1]"></string-wins>
+    <string-wins class="stringWin2" v-if="stage.keepPlaying || stage.roundEnds" v-bind:stringWinText="stringWinText[2]"></string-wins>
 
 
     <!-- FOR TESTING (start) -->
@@ -438,7 +440,7 @@ export default {
         draw: false,
         showSlideBtns: false,
         animationDone: true,
-        results: false,
+        results: [false, false, false],
         newBonus: false,
         keppPlaying: false,
         newGame: false,
@@ -482,7 +484,7 @@ export default {
       bonusTable: 0,
       plusOne: false,
       holdHeldLabel: "HOLD",
-      stringWinText: []
+      stringWinText: ['', '', '']
     };
   },
   computed: {
@@ -576,7 +578,7 @@ export default {
             }, pause2);
           }, pause1);
         }, 200);
-      } else if (this.stage.results) {
+      } else if (this.stage.results[0]) {
         this.stage.newGame = false;
         this.reset();
 
@@ -714,7 +716,7 @@ export default {
         this.results.bonus[0].bonus
       ); */
 
-      this.stage.results = true;
+      this.stage.results.splice(0, 1, true);
       if (this.results.main[0].reward > 0 || this.option.alwaysString) {
         this.stage.keepPlaying = true;
         this.stage.lockBet = true;
@@ -736,7 +738,9 @@ export default {
 
       this.cash.win = this.cash.win + currentWin;
 
-      this.stringWinText.push(currentWin.toString());
+      var winStr = this.dollarFormat(currentWin);
+      var prevText = this.stringWinText[0];
+      this.stringWinText.splice(0, 1, prevText === '' ? winStr : prevText + ' + ' + winStr);
 
       if (!this.stage.keepPlaying) {
         this.cash.balance = this.cash.balance + this.cash.win;
@@ -798,7 +802,7 @@ export default {
       }
     },
     updateHold(i) {
-      if (this.stage.primaryCardsDealt && !this.stage.results) {
+      if (this.stage.primaryCardsDealt && !this.stage.results[0]) {
         this.primaryCards0.held[i] = !this.primaryCards0.held[i];
         this.holds[i].active = !this.holds[i].active;
         this.primaryCards1.flip.splice(i, 1, this.primaryCards0.held[i]);
@@ -816,7 +820,7 @@ export default {
       }
     },
     partialReset() {
-      this.stage.results = false;
+      this.stage.results.splice(0, 3, false, false, false);
       setTimeout(() => {
         for (let i = 0; i < 5; i++) {
           this.primaryCards0.specs.splice(i, 1, "");
@@ -862,7 +866,7 @@ export default {
       this.stage.roundEnds = false;
       this.cash.win = 0;
       this.stage.newBonus = false;
-      this.stringWinText = [];
+      this.stringWinText = ['', '', ''];
 
       this.newBonus = false;
       this.holdReason = "";
@@ -1181,7 +1185,7 @@ export default {
         reward: 45,
         payout: 9
       };
-      this.stage.results = true;
+      this.stage.results.splice(0, 1, true);
     }
   },
   mounted() {
@@ -1288,6 +1292,12 @@ body {
   width: 60%;
 }
 
+.primaryResultLabel {
+  position: absolute;
+  left: 0;
+  width: 100%;
+}
+
 /* .changeBonus {
   position: absolute;
   width: 2em;
@@ -1298,4 +1308,20 @@ body {
   font-size: 1em;
   cursor: pointer;
 } */
+
+@media all and (min-aspect-ratio: 970 / 600) {
+  .stringWin0 { top: 87%; width: 58%; left: 20%; }
+  .stringWin1 { top: 58%; width: 58%; left: 20%; }
+  .stringWin2 { top: 27%; width: 58%; left: 20%; }
+}
+@media all and (max-aspect-ratio: 520 / 600) {
+  .stringWin0 { top: 72%; width: 95%; left: 2.5%; }
+  .stringWin1 { top: 55%; width: 95%; left: 2.5%; }
+  .stringWin2 { top: 35%; width: 95%; left: 2.5%; }
+}
+@media all and (max-aspect-ratio: 970 / 600) and (min-aspect-ratio: 520 / 600) {
+  .stringWin0 { top: 74%; width: 80%; left: 0%; }
+  .stringWin1 { top: 63%; width: 80%; left: 0%; }
+  .stringWin2 { top: 50%; width: 80%; left: 0%; }
+}
 </style>

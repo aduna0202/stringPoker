@@ -5,9 +5,7 @@
              <rect style="fill:#FFE401;" x="1" y="1" rx="2" width="98" height="5" />
 
            <text text-anchor="middle" class="stringWinText" font-weight="bold" :font-size="dynamicSize" x="50" :y="vShift" fill="#fc142b" >
-              Wins {{finalText}}</text>
-            <!-- <text text-anchor="middle" class="stringWinText glow" font-weight="bold" font-size="8" x="50" y="16" fill="#D7522D" >
-               Playing!</text> -->
+              Wins {{stringWinText}}</text>
         </svg>
 
     </div>
@@ -18,47 +16,17 @@
 export default {
   name: "stringWins",
   props: ["stringWinText"],
-  data() {
-    return {
-      showLabel: true
-    };
-  },
   computed: {
-    finalText: function() {
-      var result = "";
-      if (this.stringWinText.length <= 1) {
-        this.showLabel = false;
-      } else {
-        this.stringWinText.forEach((w, i, l) => {
-          /*  if (i === 0) {
-            result = w + ", ";
-          } else */
-
-          if (i === l.length - 1) {
-            result = result + " $" + w;
-          } else {
-            result = result + "$" + w + " + ";
-          }
-        });
-        this.showLabel = true;
-      }
-      return result;
+    showLabel() {
+      return this.stringWinText !== '';
     },
-    dynamicSize: function() {
-      if (this.stringWinText.length >= 7) {
-        return 2;
-      } else if (this.stringWinText.length < 5) {
-        return 4;
-      } else {
-        return 3;
-      }
+    dynamicSize() {
+      if (this.stringWinText.length > 20) return 2;
+      if (this.stringWinText.length > 10) return 3;
+      return 4;
     },
-    vShift: function() {
-      if (this.stringWinText.length < 5) {
-        return 5;
-      } else {
-        return 4.5;
-      }
+    vShift() {
+      return this.stringWinText.length > 20 ? 4.5 : 5;
     }
   }
 };

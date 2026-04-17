@@ -1,5 +1,5 @@
 <template>
-<div :class="{'cardArea':true, 'held':hold, 'fadeOut':checkFadeout()}">
+<div :class="{'cardArea':true, 'held':hold, 'fadeOut':checkFadeout(), 'isStringCard': cardType && cardType.includes('string')}">
     <div class="mainCards">
         <transition name="cardAnimation">
             <div v-if="showCard" :class="[defaultClasses, cardPosition, flip ? 'flip' : '' ]">
@@ -79,6 +79,11 @@ export default {
 .fadeOut {
   opacity: 0.2;
   transform: scale(0.9);
+}
+
+/* Crop string cards to show only rank + suit corner, hiding the large center graphic */
+.isStringCard .cSize {
+  clip-path: inset(0 0 60% 0);
 }
 
 .cardDisppears {
