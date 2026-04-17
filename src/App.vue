@@ -89,15 +89,20 @@
       v-bind:held="stringCards0.held[i]" v-bind:fadeOut="results.bonus[0].nonBonusCards" v-bind:cardBack="cardBack"></card>
 
 
-    <!-- stringCards2 result label (UI_TEST: always visible for CSS adjustment) -->
-    <div class="singleResult stringResultBonus2" v-if="results.bonus[2].bonus">
-      <div class="resultLabel">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 60">
-          <rect fill="#1a6b3a" style="stroke:#bababa; stroke-miterlimit:10;" x="30" y="25" rx="2" width="105" height="10" />
-          <text class="payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="70" y="32.5" fill="#ffffff">FLUSH</text>
-          <text class="labelCash payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="120" y="32.5" fill="#02F53A">×5</text>
-        </svg>
-      </div>
+    <!-- Combined: string result bonus + string wins for hand 2 -->
+    <div class="stringGroup2" v-if="results.bonus[2].bonus || stringWinText[2] !== ''">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 25" style="width:100%;">
+        <g v-if="results.bonus[2].bonus">
+          <rect fill="#1a6b3a" style="stroke:#bababa; stroke-miterlimit:10;" x="30" y="1" rx="2" width="105" height="10" />
+          <text class="payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="70" y="8.5" fill="#ffffff">FLUSH</text>
+          <text class="labelCash payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="120" y="8.5" fill="#02F53A">×5</text>
+        </g>
+        <g v-if="stringWinText[2] !== ''">
+          <rect style="fill:#5b5b5b;" x="0.5" y="13.5" rx="2.5" width="139" height="10" />
+          <rect style="fill:#FFE401;" x="1" y="14" rx="2" width="138" height="9" />
+          <text text-anchor="middle" class="stringWinText" font-weight="bold" font-size="5" x="70" y="21" fill="#fc142b">Wins {{ stringWinText[2] }}</text>
+        </g>
+      </svg>
     </div>
 
     <!-- primaryCards2 result label (UI_TEST: always visible for CSS adjustment) -->
@@ -111,15 +116,20 @@
       </div>
     </div>
 
-    <!-- stringCards1 result label (UI_TEST: always visible for CSS adjustment) -->
-    <div class="singleResult stringResultBonus1"  v-if="results.bonus[1].bonus">
-      <div class="resultLabel">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 60">
-          <rect fill="#1a3a8f" style="stroke:#bababa; stroke-miterlimit:10;" x="30" y="25" rx="2" width="105" height="10" />
-          <text class="payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="70" y="32.5" fill="#ffffff">THREE OF A KIND</text>
-          <text class="labelCash payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="120" y="32.5" fill="#02F53A">×3</text>
-        </svg>
-      </div>
+    <!-- Combined: string result bonus + string wins for hand 1 -->
+    <div class="stringGroup1" v-if="results.bonus[1].bonus || stringWinText[1] !== ''">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 25" style="width:100%;">
+        <g v-if="results.bonus[1].bonus">
+          <rect fill="#1a3a8f" style="stroke:#bababa; stroke-miterlimit:10;" x="30" y="1" rx="2" width="105" height="10" />
+          <text class="payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="70" y="8.5" fill="#ffffff">THREE OF A KIND</text>
+          <text class="labelCash payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="120" y="8.5" fill="#02F53A">×3</text>
+        </g>
+        <g v-if="stringWinText[1] !== ''">
+          <rect style="fill:#5b5b5b;" x="0.5" y="13.5" rx="2.5" width="139" height="10" />
+          <rect style="fill:#FFE401;" x="1" y="14" rx="2" width="138" height="9" />
+          <text text-anchor="middle" class="stringWinText" font-weight="bold" font-size="5" x="70" y="21" fill="#fc142b">Wins {{ stringWinText[1] }}</text>
+        </g>
+      </svg>
     </div>
 
     <!-- primaryCards1 result label (UI_TEST: always visible for CSS adjustment) -->
@@ -133,23 +143,21 @@
       </div>
     </div>
 
-    <div id="singleResult" class="singleResult stringResultBonus" v-if="results.bonus[0].bonus">
-
-      <div class="resultLabel">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 60">
-          <rect :fill="results.bonus[0].fill" style="stroke:#bababa; stroke-miterlimit:10;" x="30" y="25" rx="2"
-            width="105" height="10" />
-          <text v-if="results.bonus[0].bonus > 1" class="payTableText" text-anchor="middle" font-weight="bold"
-            font-size="7" x="70" y="32.5" fill="#ffffff">
-            {{ results.bonus[0].label }}</text>
-          <text v-if="results.bonus[0].bonus > 1" class="labelCash payTableText" text-anchor="middle" font-weight="bold"
-            font-size="7" x="120" y="32.5" fill="#02F53A">
-            ×{{ results.bonus[0].bonus + results.bonus[0].counter }}{{ results.bonus[0].plusOne }}</text>
-          <text v-if="results.bonus[0].bonus === 1" class="payTableText" text-anchor="middle" font-weight="bold"
-            font-size="7" x="82.5" y="32.5" fill="#ffffff">
-            {{ results.bonus[0].label }}</text>
-        </svg>
-      </div>
+    <!-- Combined: string result bonus + string wins for hand 0 -->
+    <div class="stringGroup0" v-if="results.bonus[0].bonus || stringWinText[0] !== ''">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 25" style="width:100%;">
+        <g v-if="results.bonus[0].bonus">
+          <rect :fill="results.bonus[0].fill" style="stroke:#bababa; stroke-miterlimit:10;" x="30" y="1" rx="2" width="105" height="10" />
+          <text v-if="results.bonus[0].bonus > 1" class="payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="70" y="8.5" fill="#ffffff">{{ results.bonus[0].label }}</text>
+          <text v-if="results.bonus[0].bonus > 1" class="labelCash payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="120" y="8.5" fill="#02F53A">×{{ results.bonus[0].bonus + results.bonus[0].counter }}{{ results.bonus[0].plusOne }}</text>
+          <text v-if="results.bonus[0].bonus === 1" class="payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="82.5" y="8.5" fill="#ffffff">{{ results.bonus[0].label }}</text>
+        </g>
+        <g v-if="stringWinText[0] !== ''">
+          <rect style="fill:#5b5b5b;" x="0.5" y="13.5" rx="2.5" width="139" height="10" />
+          <rect style="fill:#FFE401;" x="1" y="14" rx="2" width="138" height="9" />
+          <text text-anchor="middle" class="stringWinText" font-weight="bold" font-size="5" x="70" y="21" fill="#fc142b">Wins {{ stringWinText[0] }}</text>
+        </g>
+      </svg>
     </div>
 
 
@@ -211,9 +219,7 @@
 
     <again v-if="stage.newGame" v-on:deal="deal"></again>
     <keep-playing v-if="stage.keepPlaying" v-on:deal="deal"></keep-playing>
-    <string-wins class="stringWin0" v-if="stage.keepPlaying || stage.roundEnds" v-bind:stringWinText="stringWinText[0]"></string-wins>
-    <string-wins class="stringWin1" v-if="stage.keepPlaying || stage.roundEnds" v-bind:stringWinText="stringWinText[1]"></string-wins>
-    <string-wins class="stringWin2" v-if="stage.keepPlaying || stage.roundEnds" v-bind:stringWinText="stringWinText[2]"></string-wins>
+
 
 
     <!-- FOR TESTING (start) -->
@@ -1309,19 +1315,23 @@ body {
   cursor: pointer;
 } */
 
+.stringGroup0, .stringGroup1, .stringGroup2 {
+  position: absolute;
+}
+
 @media all and (min-aspect-ratio: 970 / 600) {
-  .stringWin0 { top: 87%; width: 58%; left: 20%; }
-  .stringWin1 { top: 58%; width: 58%; left: 20%; }
-  .stringWin2 { top: 27%; width: 58%; left: 20%; }
+  .stringGroup0 { top: 25%; width: 58%; left: 20%; }
+  .stringGroup1 { top: 30%; width: 58%; left: 20%; }
+  .stringGroup2 { top: 3%;  width: 58%; left: 20%; }
 }
 @media all and (max-aspect-ratio: 520 / 600) {
-  .stringWin0 { top: 72%; width: 95%; left: 2.5%; }
-  .stringWin1 { top: 55%; width: 95%; left: 2.5%; }
-  .stringWin2 { top: 35%; width: 95%; left: 2.5%; }
+  .stringGroup0 { top: 54%; width: 95%; left: 2.5%; }
+  .stringGroup1 { top: 47%; width: 95%; left: 2.5%; }
+  .stringGroup2 { top: 29%; width: 95%; left: 2.5%; }
 }
 @media all and (max-aspect-ratio: 970 / 600) and (min-aspect-ratio: 520 / 600) {
-  .stringWin0 { top: 74%; width: 80%; left: 0%; }
-  .stringWin1 { top: 63%; width: 80%; left: 0%; }
-  .stringWin2 { top: 50%; width: 80%; left: 0%; }
+  .stringGroup0 { top: 18%; width: 80%; left: 0%; }
+  .stringGroup1 { top: 39%; width: 80%; left: 0%; }
+  .stringGroup2 { top: 28%; width: 80%; left: 0%; }
 }
 </style>
