@@ -90,20 +90,7 @@
 
 
     <!-- Combined: string result bonus + string wins for hand 2 -->
-    <div class="stringGroup2" v-if="results.bonus[2].bonus || stringWinText[2] !== ''">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 25" style="width:100%;">
-        <g v-if="results.bonus[2].bonus">
-          <rect fill="#1a6b3a" style="stroke:#bababa; stroke-miterlimit:10;" x="30" y="1" rx="2" width="105" height="10" />
-          <text class="payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="70" y="8.5" fill="#ffffff">FLUSH</text>
-          <text class="labelCash payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="120" y="8.5" fill="#02F53A">×5</text>
-        </g>
-        <g v-if="stringWinText[2] !== ''">
-          <rect style="fill:#5b5b5b;" x="0.5" y="13.5" rx="2.5" width="139" height="10" />
-          <rect style="fill:#FFE401;" x="1" y="14" rx="2" width="138" height="9" />
-          <text text-anchor="middle" class="stringWinText" font-weight="bold" font-size="5" x="70" y="21" fill="#fc142b">Wins {{ stringWinText[2] }}</text>
-        </g>
-      </svg>
-    </div>
+    <string-group-label v-show="stage.results[2]" cssClass="stringGroup2" :bonus="results.bonus[2]" :winText="stringWinText[2]"></string-group-label>
 
     <!-- primaryCards2 result label (UI_TEST: always visible for CSS adjustment) -->
     <div class="singleResult primaryHandResult2" v-if="stage.results[2]">
@@ -117,20 +104,7 @@
     </div>
 
     <!-- Combined: string result bonus + string wins for hand 1 -->
-    <div class="stringGroup1" v-if="results.bonus[1].bonus || stringWinText[1] !== ''">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 25" style="width:100%;">
-        <g v-if="results.bonus[1].bonus">
-          <rect fill="#1a3a8f" style="stroke:#bababa; stroke-miterlimit:10;" x="30" y="1" rx="2" width="105" height="10" />
-          <text class="payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="70" y="8.5" fill="#ffffff">THREE OF A KIND</text>
-          <text class="labelCash payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="120" y="8.5" fill="#02F53A">×3</text>
-        </g>
-        <g v-if="stringWinText[1] !== ''">
-          <rect style="fill:#5b5b5b;" x="0.5" y="13.5" rx="2.5" width="139" height="10" />
-          <rect style="fill:#FFE401;" x="1" y="14" rx="2" width="138" height="9" />
-          <text text-anchor="middle" class="stringWinText" font-weight="bold" font-size="5" x="70" y="21" fill="#fc142b">Wins {{ stringWinText[1] }}</text>
-        </g>
-      </svg>
-    </div>
+    <string-group-label v-show="stage.results[1]" cssClass="stringGroup1" :bonus="results.bonus[1]" :winText="stringWinText[1]"></string-group-label>
 
     <!-- primaryCards1 result label (UI_TEST: always visible for CSS adjustment) -->
     <div class="singleResult primaryHandResult1"  v-if="stage.results[1]">
@@ -144,21 +118,6 @@
     </div>
 
     <!-- Combined: string result bonus + string wins for hand 0 -->
-    <div class="stringGroup0" v-if="results.bonus[0].bonus || stringWinText[0] !== ''">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 25" style="width:100%;">
-        <g v-if="results.bonus[0].bonus">
-          <rect :fill="results.bonus[0].fill" style="stroke:#bababa; stroke-miterlimit:10;" x="30" y="1" rx="2" width="105" height="10" />
-          <text v-if="results.bonus[0].bonus > 1" class="payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="70" y="8.5" fill="#ffffff">{{ results.bonus[0].label }}</text>
-          <text v-if="results.bonus[0].bonus > 1" class="labelCash payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="120" y="8.5" fill="#02F53A">×{{ results.bonus[0].bonus + results.bonus[0].counter }}{{ results.bonus[0].plusOne }}</text>
-          <text v-if="results.bonus[0].bonus === 1" class="payTableText" text-anchor="middle" font-weight="bold" font-size="7" x="82.5" y="8.5" fill="#ffffff">{{ results.bonus[0].label }}</text>
-        </g>
-        <g v-if="stringWinText[0] !== ''">
-          <rect style="fill:#5b5b5b;" x="0.5" y="13.5" rx="2.5" width="139" height="10" />
-          <rect style="fill:#FFE401;" x="1" y="14" rx="2" width="138" height="9" />
-          <text text-anchor="middle" class="stringWinText" font-weight="bold" font-size="5" x="70" y="21" fill="#fc142b">Wins {{ stringWinText[0] }}</text>
-        </g>
-      </svg>
-    </div>
 
 
 
@@ -166,6 +125,7 @@
       v-bind:flip="primaryCards0.flip[i]" v-bind:cardNum="i" v-bind:cardType="'primaryCards'"
       v-bind:held="primaryCards0.held[i]" v-bind:fadeOut="primaryCards0.fade[i]" v-bind:cardBack="cardBack"></card>
 
+    <string-group-label v-show="stage.results[0]" cssClass="stringGroup0" :bonus="results.bonus[0]" :winText="stringWinText[0]"></string-group-label>
 
     <div id="singleResult" class="singleResult primaryHandResult" v-if="stage.results[0]">
 
@@ -242,9 +202,10 @@
     <select v-model="selectedString" style="position:absolute; bottom:0.5%; left: 11rem; width: 10rem;">
       <option v-for="o in stringSecenarios" :value="o.cards">{{ o.desc }}</option>
     </select>
-    <p v-if="results.bonus[0].reason !== ''"
-      style="position:absolute; bottom:1%; left:0%; font-size:1rem; background: lightyellow; padding:0.2em;"><b>Bonus
-        pick reason:</b> {{ results.bonus[0].reason }}</p>
+    <p v-for="(b, i) in results.bonus" :key="i" v-if="b && b.reason"
+      :id="'reasonText' + (i + 1)"
+      :style="{ position: 'absolute', bottom: (1 + i * 2) + '%', left: '0%', fontSize: '1rem', background: 'lightyellow', padding: '0.2em' }">
+      <b>Bonus pick reason{{ i > 0 ? ' (hand ' + i + ')' : '' }}:</b> {{ b.reason }}</p>
     <!-- 
           
  <button @click="option.plusMode = !option.plusMode" style="position:absolute; bottom:0%; left: 32rem; width: 10rem; font-size:1rem; cursor: pointer; ">
@@ -344,6 +305,7 @@ import again from "./components/playAgain";
 import keepPlaying from "./components/keepPlaying";
 import stringWins from "./components/stringWins";
 import tapLabels from "./components/tapLabels";
+import stringGroupLabel from "./components/stringGroupLabel";
 
 import autoHolder from "./gameLogic/autoHolder";
 import autoPicker from "./gameLogic/autoPicker";
@@ -416,7 +378,8 @@ export default {
     tapLabels,
     slideBtns,
     keepPlaying,
-    stringWins
+    stringWins,
+    stringGroupLabel
   },
   data() {
     return {
@@ -484,7 +447,11 @@ export default {
       holds: cardHolds,
       results: {
         main: [{}, {}, {}],
-        bonus: [{ counter: 0, reason: "" }, {}, {}]
+        bonus: [
+          { counter: 0, reason: "", bonus: null, fill: "", label: "", plusOne: "" },
+          { bonus: 3, fill: "#1a3a8f", label: "THREE OF A KIND", counter: 0, plusOne: "", reason: "" },
+          { bonus: 5, fill: "#1a6b3a", label: "FLUSH", counter: 0, plusOne: "", reason: "" }
+        ]
       },
       newBonus: false,
       bonusTable: 0,
@@ -604,12 +571,23 @@ export default {
       }
 
       this.stage.newRound = false;
+      this.results.bonus[0].reason = "";
 
       this.cash.totalBet =
         this.cash.coinValue * (this.cash.base_coin_cost + this.cash.bonusCost);
 
       if (!skipStringDeal) {
         this.cash.balance = this.cash.balance - this.cash.totalBet;
+
+        for (let i = 0; i < 3; i++) {
+          console.log('gt heere?');
+          this.stringCards0.deal.splice(i, 1, false);
+          this.stringCards0.flip.splice(i, 1, false);
+          this.stringCards1.deal.splice(i, 1, false);
+          this.stringCards1.flip.splice(i, 1, false);
+          this.stringCards2.deal.splice(i, 1, false);
+          this.stringCards2.flip.splice(i, 1, false);
+        }
 
         for (let i = 0; i < this.stringCards0.specs.length; i++) {
           setTimeout(() => {
@@ -861,7 +839,7 @@ export default {
       this.option.bestSlide = "";
       primaryDecks[0].newDeck();
       this.results.main = [{}, {}, {}];
-      this.results.bonus = [{ reason: "" }, {}, {}];
+      this.results.bonus = [{ reason: "" }, { reason: "" }, { reason: "" }];
       this.stage.drawS2Cards = false;
       this.stage.dealPrimaryCards = false;
       this.stage.draw = false;
@@ -1320,18 +1298,21 @@ body {
 }
 
 @media all and (min-aspect-ratio: 970 / 600) {
-  .stringGroup0 { top: 25%; width: 58%; left: 20%; }
-  .stringGroup1 { top: 30%; width: 58%; left: 20%; }
-  .stringGroup2 { top: 3%;  width: 58%; left: 20%; }
+  .stringGroup0, .stringGroup1, .stringGroup2 { width: 58%; left: 20%; }
+  .stringGroup0 { top: 25%; }
+  .stringGroup1 { top: 30%; }
+  .stringGroup2 { top: 3%;  }
 }
 @media all and (max-aspect-ratio: 520 / 600) {
-  .stringGroup0 { top: 54%; width: 95%; left: 2.5%; }
-  .stringGroup1 { top: 47%; width: 95%; left: 2.5%; }
-  .stringGroup2 { top: 29%; width: 95%; left: 2.5%; }
+  .stringGroup0, .stringGroup1, .stringGroup2 { width: 75%; left: 23.5%; }
+  .stringGroup0 { top: 64%; }
+  .stringGroup1 { top: 47%; }
+  .stringGroup2 { top: 29%; }
 }
 @media all and (max-aspect-ratio: 970 / 600) and (min-aspect-ratio: 520 / 600) {
-  .stringGroup0 { top: 18%; width: 80%; left: 0%; }
-  .stringGroup1 { top: 39%; width: 80%; left: 0%; }
-  .stringGroup2 { top: 28%; width: 80%; left: 0%; }
+  .stringGroup0, .stringGroup1, .stringGroup2 { width: 80%; left: 0%; }
+  .stringGroup0 { top: 18%; }
+  .stringGroup1 { top: 39%; }
+  .stringGroup2 { top: 28%; }
 }
 </style>
