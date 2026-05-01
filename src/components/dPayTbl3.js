@@ -29,6 +29,8 @@ function tbl(value, coinValue, id, payVersion) {
         .attr('x', 10)
         .text('*Discard Bonus (3-Card Hand)'); */
 
+    svg.append('rect').attr('width', opts.width).attr('height', opts.height).attr('fill', 'rgba(0,0,0,0.75)').attr('rx', 6).attr('ry', 6);
+
     var visSvg = svg.append('g').attr('class', 'vis-group');
 
     /*     var colSpecs = [

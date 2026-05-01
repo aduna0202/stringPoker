@@ -20,6 +20,8 @@ function table(value, coinValue, id, payVersion) {
     var svg = parentDiv.append('svg').attr('width', '100%').attr("viewBox", "0 0 " + opts.width + ' ' + opts.height)
         .attr("preserveAspectRatio", "xMinYMin meet");
 
+    svg.append('rect').attr('width', opts.width).attr('height', opts.height).attr('fill', 'rgba(0,0,0,0.75)').attr('rx', 6).attr('ry', 6);
+
     var visSvg = svg.append('g').attr('class', 'vis-group');
 
 /*     svg.append('g').append('text')

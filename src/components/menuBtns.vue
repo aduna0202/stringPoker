@@ -2,6 +2,7 @@
     <div class="buttonsMenu">
         <div class="btnBase menuBtnPos1 fullScreenBtn" v-on:click="fullScreen"></div>
         <div class="btnBase menuBtnPos2 infoBtn"  v-on:click="openInfo"></div>
+        <div class="btnBase menuBtnPos3 showPaytable" v-on:click="showPaytable"></div>
     </div>
 </template>
 
@@ -11,6 +12,9 @@ export default {
     methods: {
         openInfo: function() {
             this.$emit('openInfo');
+        },
+        showPaytable: function() {
+            this.$emit('showPaytable');
         },
         fullScreen: function() {
             if (
@@ -61,6 +65,8 @@ export default {
     background-position: center;
     position: absolute;
     cursor: pointer;
+    z-index: 10;
+    pointer-events: all;
 }
 
 .fullScreenBtn {
@@ -87,6 +93,18 @@ export default {
     background-image: url("../assets/buttons/Info-3.svg");
 }
 
+.showPaytable {
+    background-image: url("../assets/buttons/PayTable-1.svg");
+}
+
+.showPaytable:hover {
+    background-image: url("../assets/buttons/PayTable-2.svg");
+}
+
+.showPaytable:active {
+    background-image: url("../assets/buttons/PayTable-3.svg");
+}
+
 
 @media all and (min-aspect-ratio: 970 / 600) {
     /*LANDSCAPE MODE*/
@@ -97,6 +115,11 @@ export default {
     }
     .menuBtnPos2 {
         left: 9%;
+        width: 7%;
+        padding-bottom: 7%;
+    }
+    .menuBtnPos3 {
+        left: 17%;
         width: 7%;
         padding-bottom: 7%;
     }
@@ -114,6 +137,11 @@ export default {
         width: 10%;
         padding-bottom: 10%;
     }
+    .menuBtnPos3 {
+        left: 25%;
+        width: 10%;
+        padding-bottom: 10%;
+    }
 }
 
 @media all and (max-aspect-ratio: 970 / 600) and (min-aspect-ratio: 520 / 600) {
@@ -125,6 +153,11 @@ export default {
     }
     .menuBtnPos2 {
         left: 10%;
+        width: 7%;
+        padding-bottom: 7%;
+    }
+    .menuBtnPos3 {
+        left: 19%;
         width: 7%;
         padding-bottom: 7%;
     }

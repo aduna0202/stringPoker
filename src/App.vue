@@ -1,9 +1,9 @@
 <template>
   <div class="fullScreen" :style="bgImg">
 
-    <pay-table v-on:updateBonus="updateBonus()" v-bind:baseBetValue="cash.coinValue * cash.base_coin_cost"></pay-table>
+    <pay-table v-show="payTableOpen" v-on:updateBonus="updateBonus()" v-bind:baseBetValue="cash.coinValue * cash.base_coin_cost"></pay-table>
     <logo></logo>
-    <menu-btns v-on:openInfo="openInfoBox"></menu-btns>
+    <menu-btns v-on:openInfo="openInfoBox" v-on:showPaytable="togglePayTable"></menu-btns>
     <info v-on:closeInfo="infoBoxOpen = false" :open="infoBoxOpen"></info>
     <cash-display v-bind:glow="stage.results[0] || stage.newRound" v-on:updateBet="changeBet()" v-bind:cash="cash"
       v-on:playWin="playWinMsg()" v-on:endRound="endRound()" v-bind:showValue="stage.results[0] || stage.showWin"
@@ -403,6 +403,7 @@ export default {
         plusMode: false
       },
       infoBoxOpen: false,
+      payTableOpen: false,
       stage: {
         newRound: true,
         primaryCardsDealt: false,
@@ -524,6 +525,9 @@ export default {
     openInfoBox() {
       this.infoBoxOpen = true;
       document.getElementById("infoFrame").style.zIndex = "1";
+    },
+    togglePayTable() {
+      this.payTableOpen = !this.payTableOpen;
     },
     dollarFormat(x) {
       if (x === "") {
@@ -1401,8 +1405,8 @@ body {
 @media all and (max-aspect-ratio: 520 / 600) {
   .stringGroup0, .stringGroup1, .stringGroup2 { width: 75%; left: 23.5%; }
   .stringGroup0 { top: 64%; }
-  .stringGroup1 { top: 47%; }
-  .stringGroup2 { top: 29%; }
+  .stringGroup1 { top: 42%; }
+  .stringGroup2 { top: 20%; }
 }
 @media all and (max-aspect-ratio: 970 / 600) and (min-aspect-ratio: 520 / 600) {
   .stringGroup0, .stringGroup1, .stringGroup2 { width: 80%; left: 0%; }

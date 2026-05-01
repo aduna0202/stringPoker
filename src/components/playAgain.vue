@@ -36,7 +36,8 @@ export default {
 }
 
 .again {
-    position: relative;
+    position: absolute;
+    z-index: 20;
 }
 
 .againImg {

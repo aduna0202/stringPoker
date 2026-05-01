@@ -308,6 +308,8 @@ export default {
   animation: swap 4s infinite; /* IE 10+, Fx 29+ */
 }
 
+
+
 @supports (-ms-ime-align: auto) {
   .payTableText,
   .againText,
@@ -349,6 +351,8 @@ export default {
     width: 100%;
   }
   .payTable {
+    position: absolute;
+    z-index: 15;
     width: 21.5%;
     top: 18%;
     left: 0.5%;
@@ -369,6 +373,8 @@ export default {
     width: 98%;
   }
   .payTable {
+    position: absolute;
+    z-index: 15;
     width: 100%;
     top: 19%;
   }
@@ -393,6 +399,8 @@ export default {
   }
 
   .payTable {
+    position: absolute;
+    z-index: 15;
     width: 18%;
     top: 19%;
     left: 83.5%;
