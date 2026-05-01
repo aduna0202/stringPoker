@@ -73,7 +73,7 @@
       v-bind:held="stringCards2.held[i]" v-bind:fadeOut="false" v-bind:cardBack="cardBack"></card>
     <card class="primaryRow2" v-for="(c, i) in primaryCards2.deal" v-bind:cardPosition="cPos[i]" v-bind:showCard="c"
       v-bind:flip="primaryCards2.flip[i]" v-bind:cardNum="i" v-bind:cardType="'primaryCards2'"
-      v-bind:held="primaryCards2.held[i]" v-bind:fadeOut="false" v-bind:cardBack="cardBack"></card>
+      v-bind:held="primaryCards2.held[i]" v-bind:fadeOut="primaryCards2.fade[i]" v-bind:cardBack="cardBack"></card>
 
 
     <card class="stringRow1" v-for="(c, i) in stringCards1.deal" v-bind:cardPosition="sPos[i]" v-bind:showCard="c"
@@ -81,7 +81,7 @@
       v-bind:held="stringCards1.held[i]" v-bind:fadeOut="false" v-bind:cardBack="cardBack"></card>
     <card class="primaryRow1" v-for="(c, i) in primaryCards1.deal" v-bind:cardPosition="cPos[i]" v-bind:showCard="c"
       v-bind:flip="primaryCards1.flip[i]" v-bind:cardNum="i" v-bind:cardType="'primaryCards1'"
-      v-bind:held="primaryCards1.held[i]" v-bind:fadeOut="false" v-bind:cardBack="cardBack"></card>
+      v-bind:held="primaryCards1.held[i]" v-bind:fadeOut="primaryCards1.fade[i]" v-bind:cardBack="cardBack"></card>
 
 
     <card v-for="(c, i) in stringCards0.deal" v-bind:cardPosition="sPos[i]" v-bind:showCard="c"
@@ -420,7 +420,8 @@ export default {
         lockBet: false,
         roundEnds: false,
         activeHand: 0,
-        mirrorHolds: false
+        mirrorHolds: false,
+        inBonusRound: false
       },
       /*  MDIndex: -1, */
       cash: {
@@ -543,6 +544,7 @@ export default {
         const handNum = this.stage.activeHand;
         this.stage.keepPlaying = false;
         this.stage.newRound = false;
+        this.stage.inBonusRound = true;
 
         setTimeout(() => {
           this.showNewBonus(
@@ -629,7 +631,9 @@ export default {
 
     draw() {
       const handNum = this.stage.activeHand;
-      this.originalHolds = this.allPrimaryCards[handNum].held.slice();
+      if (!this.stage.inBonusRound) {
+        this.originalHolds = this.allPrimaryCards[handNum].held.slice();
+      }
       this.stage.drawS2Cards = true;
       this.stage.mirrorHolds = false;
 
@@ -930,6 +934,7 @@ export default {
       this.stage.roundEnds = false;
       this.cash.win = 0;
       this.stage.newBonus = false;
+      this.stage.inBonusRound = false;
       this.stringWinText = ['', '', ''];
       this.originalHolds = Array(5).fill(false);
 
