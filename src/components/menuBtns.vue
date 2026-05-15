@@ -107,21 +107,21 @@ export default {
 
 
 @media all and (min-aspect-ratio: 970 / 600) {
-    /*LANDSCAPE MODE*/
+    /*LANDSCAPE MODE - portrait layout*/
     .menuBtnPos1 {
         left: 1%;
-        width: 7%;
-        padding-bottom: 7%;
+        width: 10%;
+        padding-bottom: 10%;
     }
     .menuBtnPos2 {
-        left: 9%;
-        width: 7%;
-        padding-bottom: 7%;
+        left: 13%;
+        width: 10%;
+        padding-bottom: 10%;
     }
     .menuBtnPos3 {
-        left: 17%;
-        width: 7%;
-        padding-bottom: 7%;
+        left: 25%;
+        width: 10%;
+        padding-bottom: 10%;
     }
 }
 
@@ -145,21 +145,21 @@ export default {
 }
 
 @media all and (max-aspect-ratio: 970 / 600) and (min-aspect-ratio: 520 / 600) {
-    /*SQUARE (DESKTOP) MODE*/
+    /*SQUARE MODE - portrait layout*/
     .menuBtnPos1 {
         left: 1%;
-        width: 7%;
-        padding-bottom: 7%;
+        width: 10%;
+        padding-bottom: 10%;
     }
     .menuBtnPos2 {
-        left: 10%;
-        width: 7%;
-        padding-bottom: 7%;
+        left: 13%;
+        width: 10%;
+        padding-bottom: 10%;
     }
     .menuBtnPos3 {
-        left: 19%;
-        width: 7%;
-        padding-bottom: 7%;
+        left: 25%;
+        width: 10%;
+        padding-bottom: 10%;
     }
 }
 </style>

@@ -1,31 +1,30 @@
 @media all and (max-aspect-ratio: 970 / 600) and (min-aspect-ratio: 520 / 600) {
-  /*SQUARE (DESKTOP) MODE*/
+  /* SQUARE MODE - portrait layout */
 
   .changeBG {
-    left: 0.2rem;
+    right: 0.2rem;
   }
 
   .label {
-    width: 53%;
-    left: 28.725%;
+    width: 66%;
+    left: 22.5%;
   }
 
   .mainCards {
-    width: 80%;
-    /*   top: 30%; */
+    width: 100%;
   }
 
   .cardArea {
-    top: 50%;
-    left: -10%;
+    top: 68%;
+    margin: 0 auto;
   }
   .holdArea {
-    top: 20%;
-    left: -10%;
+    top: 35%;
+    margin: 0 auto;
   }
 
 .stringCard{
- top: 20% !important;
+ top: 36.5% !important;
 }
 
   .held {
@@ -34,11 +33,11 @@
 
   @keyframes moveUp {
     0% {
-      top: 50%;
+      top: 56.5%;
       animation-timing-function: ease-in;
     }
     100% {
-      top: 20%;
+      top: 63.1%;
     }
   }
   .unHeld {
@@ -47,54 +46,54 @@
 
   @keyframes moveDown {
     0% {
-      top: 20%;
+      top: 55%;
       animation-timing-function: ease-in;
     }
     100% {
-      top: 50%;
+      top: 59.5%;
     }
   }
 
   .singleResult {
-    left: -10%;
+    margin: 0 auto;
   }
 
   .stringResultBonus {
-    top: 18%;
+    top: 54%;
   }
   .primaryHandResult {
-    top: 68%;
+    top: 63.2%;
   }
   .primaryHandResult1 {
-    top: 57%;
+    top: 42%;
   }
   .primaryHandResult2 {
-    top: 46%;
+    top: 20%;
   }
 
   .bCard1 {
-    top: 44%;
+    top: 50%;
   }
   .bCard2 {
-    top: 53%;
+    top: 56%;
   }
   .bCard3 {
     top: 62%;
   }
   .bCard4 {
-    top: 71%;
+    top: 68%;
   }
 
-  .cardArea.stringRow1.held { animation: moveUpRow1S 0.2s forwards; }
-  @keyframes moveUpRow1S {
-    0%   { top: 50%; animation-timing-function: ease-in; }
-    100% { top: 10%; }
+  .cardArea.stringRow1.held { animation: moveUpRow1P 0.2s forwards; }
+  @keyframes moveUpRow1P {
+    0%   { top: 56.5%; animation-timing-function: ease-in; }
+    100% { top: 42%; }
   }
-  .cardArea.stringRow2.held { animation: moveUpRow2S 0.2s forwards; }
-  @keyframes moveUpRow2S {
-    0%   { top: 50%; animation-timing-function: ease-in; }
-    100% { top: 0%;  }
+  .cardArea.stringRow2.held { animation: moveUpRow2P 0.2s forwards; }
+  @keyframes moveUpRow2P {
+    0%   { top: 56.5%; animation-timing-function: ease-in; }
+    100% { top: 20%; }
   }
-  .cardArea.primaryRow1 { top: 39%; }
-  .cardArea.primaryRow2 { top: 28%; }
+  .cardArea.primaryRow1 { top: 47%; }
+  .cardArea.primaryRow2 { top: 25%; }
 }

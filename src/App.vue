@@ -1402,10 +1402,20 @@ body {
 }
 
 @media all and (min-aspect-ratio: 970 / 600) {
-  .stringGroup0, .stringGroup1, .stringGroup2 { width: 58%; left: 20%; }
-  .stringGroup0 { top: 25%; }
-  .stringGroup1 { top: 30%; }
-  .stringGroup2 { top: 3%;  }
+  /* LANDSCAPE - center portrait game window */
+  #app {
+    display: flex;
+    justify-content: center;
+  }
+  .fullScreen {
+    width: calc(100vh * 520 / 600);
+    flex-shrink: 0;
+  }
+  /* Portrait layout values */
+  .stringGroup0, .stringGroup1, .stringGroup2 { width: 42%; left: 33.5%; }
+  .stringGroup0 { top: 64%; }
+  .stringGroup1 { top: 42%; }
+  .stringGroup2 { top: 20%; }
 }
 @media all and (max-aspect-ratio: 520 / 600) {
   .stringGroup0, .stringGroup1, .stringGroup2 { width: 75%; left: 23.5%; }
@@ -1414,9 +1424,19 @@ body {
   .stringGroup2 { top: 20%; }
 }
 @media all and (max-aspect-ratio: 970 / 600) and (min-aspect-ratio: 520 / 600) {
-  .stringGroup0, .stringGroup1, .stringGroup2 { width: 80%; left: 0%; }
-  .stringGroup0 { top: 18%; }
-  .stringGroup1 { top: 39%; }
-  .stringGroup2 { top: 28%; }
+  /* SQUARE - center portrait game window */
+  #app {
+    display: flex;
+    justify-content: center;
+  }
+  .fullScreen {
+    width: calc(100vh * 520 / 600);
+    flex-shrink: 0;
+  }
+  /* Portrait layout values */
+  .stringGroup0, .stringGroup1, .stringGroup2 { width: 50%; left: 33.5%; }
+  .stringGroup0 { top: 64%; }
+  .stringGroup1 { top: 42%; }
+  .stringGroup2 { top: 20%; }
 }
 </style>

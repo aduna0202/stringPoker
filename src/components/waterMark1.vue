@@ -20,19 +20,19 @@ export default {
 }
 
 @media all and (min-aspect-ratio: 970 / 600) {
-  /*LANDSCAPE MODE*/
+  /*LANDSCAPE MODE - portrait layout*/
   .waterSet {
-    width: 33%;
-    left: 30%;
+    width: 50%;
+    left: 25%;
   }
   .waterMark {
-    top: 75%;
+    top: 65%;
   }
   .waterMark2 {
-    top: 38%;
+    top: 45%;
   }
   .waterMark3 {
-    top: 90%;
+    top: 3%;
   }
 }
 
@@ -54,19 +54,19 @@ export default {
 }
 
 @media all and (max-aspect-ratio: 970 / 600) and (min-aspect-ratio: 520 / 600) {
-  /*SQUARE (DESKTOP) MODE*/
+  /*SQUARE MODE - portrait layout*/
   .waterSet {
-    width: 56%;
-    left: 18%;
+    width: 50%;
+    left: 25%;
   }
   .waterMark {
-    top: 62%;
+    top: 65%;
   }
   .waterMark2 {
-    top: 32%;
+    top: 45%;
   }
   .waterMark3 {
-    top: 82%;
+    top: 3%;
   }
 }
 </style>

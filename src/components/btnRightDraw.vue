@@ -30,21 +30,19 @@ export default {
 <style>
 
 @media all and (min-aspect-ratio: 970 / 600) {
-    /*LANDSCAPE MODE*/
+    /*LANDSCAPE MODE - portrait layout*/
     .btnHeight {
-        bottom: -24%;
+        bottom: -75%;
     }
-
     .sideBtn {
-        display: block;
-    }
-    .bottomBtn {
         display: none;
     }
-
+    .bottomBtn {
+        display: block;
+    }
     .btnBase {
-        right: 0%;
-        width: 21%;
+        right: 30%;
+        width: 40%;
     }
 }
 
@@ -66,19 +64,19 @@ export default {
 }
 
 @media all and (max-aspect-ratio: 970 / 600) and (min-aspect-ratio: 520 / 600) {
-    /*SQUARE (DESKTOP) MODE*/
+    /*SQUARE MODE - portrait layout*/
     .btnHeight {
-        bottom: -74%;
+        bottom: -75%;
     }
     .sideBtn {
-        display: block;
-    }
-    .bottomBtn {
         display: none;
     }
-        .btnBase {
-        right: 0%;
-        width: 15%;
+    .bottomBtn {
+        display: block;
+    }
+    .btnBase {
+        right: 30%;
+        width: 40%;
     }
 }
 </style>

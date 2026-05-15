@@ -72,12 +72,11 @@ export default {
 }
 
 @media all and (min-aspect-ratio: 970 / 600) {
-    /*LANDSCAPE MODE*/
+    /*LANDSCAPE MODE - portrait layout*/
     .tapLbl {
-        top: 82.5%;
-        width: 28%;
-        left: 37%;
-        /*  margin: 0 auto; */
+        top: 72.5%;
+        width: 55%;
+        left: 22.5%;
     }
 }
 
@@ -91,11 +90,11 @@ export default {
 }
 
 @media all and (max-aspect-ratio: 970 / 600) and (min-aspect-ratio: 520 / 600) {
-    /*SQUARE (DESKTOP) MODE*/
+    /*SQUARE MODE - portrait layout*/
     .tapLbl {
-        top: 78%;
-        width: 36%;
-        left: 21%;
+        top: 72.5%;
+        width: 55%;
+        left: 22.5%;
     }
 }
 </style>

@@ -28,12 +28,11 @@ export default {
 }
 
 @media all and (min-aspect-ratio: 970 / 600) {
-    /*LANDSCAPE MODE*/
+    /*LANDSCAPE MODE - portrait layout*/
     .logo {
-        top: 1%;
-        width: 56%;
-        left: 18%;
-        /*  margin: 0 auto; */
+        top: 10%;
+        width: 65%;
+        left: 0%;
     }
 }
 
@@ -47,11 +46,11 @@ export default {
 }
 
 @media all and (max-aspect-ratio: 970 / 600) and (min-aspect-ratio: 520 / 600) {
-    /*SQUARE (DESKTOP) MODE*/
+    /*SQUARE MODE - portrait layout*/
     .logo {
-        top: 1%;
-        width: 56%;
-        left: 18%;
+        top: 10%;
+        width: 65%;
+        left: 0%;
     }
 }
 </style>

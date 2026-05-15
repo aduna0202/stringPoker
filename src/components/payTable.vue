@@ -345,23 +345,23 @@ export default {
   }
 }
 @media all and (min-aspect-ratio: 970 / 600) {
-  /*LANDSCAPE MODE*/
+  /*LANDSCAPE MODE - portrait layout*/
   .payTblW {
     position: absolute;
-    width: 100%;
+    left: 0.5%;
+    width: 98%;
   }
   .payTable {
     position: absolute;
     z-index: 15;
-    width: 21.5%;
-    top: 18%;
-    left: 0.5%;
+    width: 100%;
+    top: 19%;
   }
   .threeColumn {
-    display: none;
+    display: block;
   }
   .oneColumn {
-    display: block;
+    display: none;
   }
 }
 
@@ -392,24 +392,23 @@ export default {
 }
 
 @media all and (max-aspect-ratio: 970 / 600) and (min-aspect-ratio: 520 / 600) {
-  /*SQUARE (DESKTOP) MODE*/
+  /*SQUARE MODE - portrait layout*/
   .payTblW {
     position: absolute;
-    width: 100%;
+    left: 0.5%;
+    width: 98%;
   }
-
   .payTable {
     position: absolute;
     z-index: 15;
-    width: 18%;
+    width: 100%;
     top: 19%;
-    left: 83.5%;
   }
   .threeColumn {
-    display: none;
+    display: block;
   }
   .oneColumn {
-    display: block;
+    display: none;
   }
 }
 </style>

@@ -68,12 +68,11 @@ export default {
 }
 
 @media all and (min-aspect-ratio: 970 / 600) {
-  /*LANDSCAPE MODE*/
+  /*LANDSCAPE MODE - portrait layout*/
   .slideChoice {
-    top: 56%;
-    width: 56%;
-    left: 22%;
-    /*  margin: 0 auto; */
+    top: 55.5%;
+    width: 95%;
+    left: 2.5%;
   }
 }
 
@@ -87,11 +86,11 @@ export default {
 }
 
 @media all and (max-aspect-ratio: 970 / 600) and (min-aspect-ratio: 520 / 600) {
-  /*SQUARE (DESKTOP) MODE*/
+  /*SQUARE MODE - portrait layout*/
   .slideChoice {
-    top: 50%;
-    width: 76%;
-    left: 2%;
+    top: 55.5%;
+    width: 95%;
+    left: 2.5%;
   }
 }
 </style>

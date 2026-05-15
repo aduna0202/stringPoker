@@ -189,9 +189,9 @@ export default {
 }
 
 @media all and (min-aspect-ratio: 970 / 600) {
-  /*LANDSCAPE MODE*/
+  /*LANDSCAPE MODE - portrait layout*/
   .cashDisplays {
-    width: 30%;
+    width: 42%;
     float: right;
     margin-right: 1%;
     margin-top: 1%;
@@ -209,9 +209,9 @@ export default {
 }
 
 @media all and (max-aspect-ratio: 970 / 600) and (min-aspect-ratio: 520 / 600) {
-  /*SQUARE (DESKTOP) MODE*/
+  /*SQUARE MODE - portrait layout*/
   .cashDisplays {
-    width: 30%;
+    width: 42%;
     float: right;
     margin-right: 1%;
     margin-top: 1%;
