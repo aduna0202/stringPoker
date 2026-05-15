@@ -68,23 +68,23 @@
     </div>
 
 
-    <card class="stringRow2" v-for="(c, i) in stringCards2.deal" v-bind:cardPosition="sPos[i]" v-bind:showCard="c"
+    <card :class="['stringRow2', handFocusClass(2)]" v-for="(c, i) in stringCards2.deal" v-bind:cardPosition="sPos[i]" v-bind:showCard="c"
       v-bind:flip="stringCards2.flip[i]" v-bind:cardNum="i" v-bind:cardType="'stringCards2'"
       v-bind:held="stringCards2.held[i]" v-bind:fadeOut="false" v-bind:cardBack="cardBack"></card>
-    <card class="primaryRow2" v-for="(c, i) in primaryCards2.deal" v-bind:cardPosition="cPos[i]" v-bind:showCard="c"
+    <card :class="['primaryRow2', handFocusClass(2)]" v-for="(c, i) in primaryCards2.deal" v-bind:cardPosition="cPos[i]" v-bind:showCard="c"
       v-bind:flip="primaryCards2.flip[i]" v-bind:cardNum="i" v-bind:cardType="'primaryCards2'"
       v-bind:held="primaryCards2.held[i]" v-bind:fadeOut="primaryCards2.fade[i]" v-bind:cardBack="cardBack"></card>
 
 
-    <card class="stringRow1" v-for="(c, i) in stringCards1.deal" v-bind:cardPosition="sPos[i]" v-bind:showCard="c"
+    <card :class="['stringRow1', handFocusClass(1)]" v-for="(c, i) in stringCards1.deal" v-bind:cardPosition="sPos[i]" v-bind:showCard="c"
       v-bind:flip="stringCards1.flip[i]" v-bind:cardNum="i" v-bind:cardType="'stringCards1'"
       v-bind:held="stringCards1.held[i]" v-bind:fadeOut="false" v-bind:cardBack="cardBack"></card>
-    <card class="primaryRow1" v-for="(c, i) in primaryCards1.deal" v-bind:cardPosition="cPos[i]" v-bind:showCard="c"
+    <card :class="['primaryRow1', handFocusClass(1)]" v-for="(c, i) in primaryCards1.deal" v-bind:cardPosition="cPos[i]" v-bind:showCard="c"
       v-bind:flip="primaryCards1.flip[i]" v-bind:cardNum="i" v-bind:cardType="'primaryCards1'"
       v-bind:held="primaryCards1.held[i]" v-bind:fadeOut="primaryCards1.fade[i]" v-bind:cardBack="cardBack"></card>
 
 
-    <card v-for="(c, i) in stringCards0.deal" v-bind:cardPosition="sPos[i]" v-bind:showCard="c"
+    <card :class="handFocusClass(0)" v-for="(c, i) in stringCards0.deal" v-bind:cardPosition="sPos[i]" v-bind:showCard="c"
       v-bind:flip="stringCards0.flip[i]" v-bind:cardNum="i" v-bind:cardType="'stringCards'"
       v-bind:held="stringCards0.held[i]" v-bind:fadeOut="results.bonus[0].nonBonusCards" v-bind:cardBack="cardBack"></card>
 
@@ -123,7 +123,7 @@
 
 
 
-    <card v-for="(c, i) in primaryCards0.deal" v-bind:cardPosition="cPos[i]" v-bind:showCard="c"
+    <card :class="handFocusClass(0)" v-for="(c, i) in primaryCards0.deal" v-bind:cardPosition="cPos[i]" v-bind:showCard="c"
       v-bind:flip="primaryCards0.flip[i]" v-bind:cardNum="i" v-bind:cardType="'primaryCards'"
       v-bind:held="primaryCards0.held[i]" v-bind:fadeOut="primaryCards0.fade[i]" v-bind:cardBack="cardBack"></card>
 
@@ -357,8 +357,6 @@ var stringTests = [
   { cards: ["H13", "C8", "D13"], desc: "pair 3" }
 ];
 
-//console.log(dealer.getMultiply());
-
 export default {
   name: "app",
   components: {
@@ -420,6 +418,8 @@ export default {
         lockBet: false,
         roundEnds: false,
         activeHand: 0,
+        handFocusActive: false,
+        handFocusRelease: false,
         mirrorHolds: false,
         inBonusRound: false
       },
@@ -491,6 +491,15 @@ export default {
     }
   },
   methods: {
+    handFocusClass(handNum) {
+      if (!this.stage.handFocusActive) {
+        if (this.stage.handFocusRelease) {
+          return "handFocusRelease";
+        }
+        return "";
+      }
+      return handNum === this.stage.activeHand ? "handFocusActive" : "handFocusDim";
+    },
     updateBonus() {
       this.playChipClick();
       if (this.bonusTable < 2) {
@@ -508,21 +517,6 @@ export default {
       this.playChipClick();
       this.cash.coinValue = this.cash.coinOptions[this.cash.activeCoinOption];
     },
-    removeRevCards(handNum) {
-      var firstCard = this.slideOptions[this.originalSlide][handNum],
-        lastCard = firstCard + 4;
-      for (var s = 0; s < this.showMainCard.length; s++) {
-        if (s < firstCard || s > lastCard) {
-          this.showMainCard.splice(s, 1, false);
-        }
-      }
-      this.playDealSound();
-      return {
-        lCard: lastCard,
-        fCard: firstCard
-      };
-    },
-
     openInfoBox() {
       this.infoBoxOpen = true;
       document.getElementById("infoFrame").style.zIndex = "1";
@@ -589,6 +583,8 @@ export default {
       stringDecks[2].newDeck();
 
       this.stage.newRound = false;
+      this.stage.handFocusActive = false;
+      this.stage.handFocusRelease = false;
       this.results.bonus[0].reason = "";
       this.results.bonus[1].reason = "";
       this.results.bonus[2].reason = "";
@@ -743,6 +739,11 @@ export default {
         this.stage.newRound = true;
         this.stage.lockBet = false;
         this.stage.roundEnds = true;
+        this.stage.handFocusActive = false;
+        this.stage.handFocusRelease = true;
+        setTimeout(() => {
+          this.stage.handFocusRelease = false;
+        }, 250);
         this.cash.balance = this.cash.balance + this.cash.win;
         bus.$emit("updateCashDisplay", this.cash);
       }
@@ -864,7 +865,6 @@ export default {
     reset(partial) {
       if (partial) {
         this.partialReset();
-        //  console.log("partial reset!");
       } else {
         this.partialReset();
         this.fullReset();
@@ -916,6 +916,8 @@ export default {
     fullReset() {
       this.plusOne = false;
       this.stage.activeHand = 0;
+      this.stage.handFocusActive = false;
+      this.stage.handFocusRelease = false;
       this.stage.mirrorHolds = false;
       this.soundClearCards.play();
       this.showWater = true;
@@ -1077,19 +1079,24 @@ export default {
             }
             this.playFlipSound();
             if (i === a.length - 1) {
+              this.stage.handFocusActive = false;
+              this.stage.handFocusRelease = false;
               setTimeout(() => {
-                this.stage.primaryCardsDealt = true;
-                this.showWater2 = false;
-                if (isInitialDeal) {
-                  this.stage.mirrorHolds = true;
-                }
-                if (ongoingGame) {
-                  this.stage.drawS2Cards = false;
-                }
-                if (swapComplete) {
-                  this.analyzeResults(this.stage.activeHand);
-                }
-              }, 300);
+                this.stage.handFocusActive = true;
+                setTimeout(() => {
+                  this.stage.primaryCardsDealt = true;
+                  this.showWater2 = false;
+                  if (isInitialDeal) {
+                    this.stage.mirrorHolds = true;
+                  }
+                  if (ongoingGame) {
+                    this.stage.drawS2Cards = false;
+                  }
+                  if (swapComplete) {
+                    this.analyzeResults(this.stage.activeHand);
+                  }
+                }, 850);
+              }, 60);
             }
           }, initialDelay);
           initialDelay = initialDelay + 100;
@@ -1399,6 +1406,41 @@ body {
 
 .stringGroup0, .stringGroup1, .stringGroup2 {
   position: absolute;
+}
+
+.handFocusDim:not(.fadeOut) {
+  opacity: 0.28;
+  filter: saturate(0.45) brightness(0.75);
+  transform: scale(0.96);
+  transition: opacity 0.35s ease, filter 0.35s ease, transform 0.35s ease;
+}
+
+.handFocusActive:not(.fadeOut) {
+  opacity: 1;
+  filter: none;
+  transform: scale(1);
+  
+  transition: opacity 0.35s ease, filter 0.35s ease, transform 0.35s ease;
+}
+
+.handFocusRelease:not(.fadeOut) {
+  opacity: 1;
+  filter: none;
+  transform: scale(1);
+  transition: opacity 0.25s ease, filter 0.25s ease, transform 0.25s ease;
+}
+
+.handFocusActive .cSize:not(.cardAnimation-enter-active):not(.cardAnimation-leave-active) {
+  animation: activeHandFocusIn 0.75s ease-out;
+}
+
+@keyframes activeHandFocusIn {
+  0% {
+    filter: drop-shadow(0 0 0.25rem rgba(255, 228, 1, 0.7));
+  }
+  100% {
+    filter: drop-shadow(0 0 0 rgba(255, 228, 1, 0));
+  }
 }
 
 @media all and (min-aspect-ratio: 970 / 600) {
