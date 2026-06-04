@@ -1,4 +1,4 @@
-<template>
+<template>  
   <div class="fullScreen" :style="bgImg">
 
     <pay-table v-show="payTableOpen" v-on:updateBonus="updateBonus()" v-bind:baseBetValue="cash.coinValue * cash.base_coin_cost"></pay-table>
@@ -11,23 +11,6 @@
     <water-mark1 :style="{ 'display': showWater2 ? 'block' : 'none' }"></water-mark1>
     <water-mark2 :style="{ 'display': showWater ? 'block' : 'none' }"></water-mark2>
     <water-mark3></water-mark3>
-
-    <div class="cardArea stringCard" :style="{ display: (newBonus && stage.newBonus) ? 'block' : 'none' }">
-      <div class="mainCards">
-        <div v-if="discardedStringCard !== ''" class='cSize flip-container flip c5Pos fadeOut'>
-          <div class="flipper ">
-            <div class='back' :class="discardedStringCard"></div>
-          </div>
-          <div style="padding-top:42%; margin-left:-20%; text-align:center; position: absolute; width:140%;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30">
-              <rect style="fill:#FFE401; stroke:#BB2601; stroke-width:3;" x="20" y="5" rx="5" width="60" height="20" />
-              <text text-anchor="middle" font-weight="900" font-size="12" x="50" y="18.5" fill="#000000" opacity="1">
-                Discard</text>
-            </svg>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <div v-if="option.plusMode" id="note" class="cardArea stringCard"
       :style="{ display: (results.bonus[stage.activeHand].counter > 0) ? 'block' : 'none' }">
@@ -817,7 +800,7 @@ export default {
           this.allStringCards[handNum].deal.splice(newBonus.removeStringCardNum, 1, false);
           this.allPrimaryCards[handNum].fade.splice(newBonus.pCardNumSwap, 1, true);
           setTimeout(() => {
-            this.discardedStringCard = stringDecks[handNum].upgradeStringCard(
+            stringDecks[handNum].upgradeStringCard(
               newBonus.removeStringCardNum,
               newBonus.pCardSwap
             );
@@ -942,7 +925,6 @@ export default {
 
       this.newBonus = false;
       this.holdReason = "";
-      this.discardedStringCard = "";
       bus.$emit("resetHold", {
         cardType: "primaryCards",
         hold: false
@@ -1482,3 +1464,4 @@ body {
   .stringGroup2 { top: 20%; }
 }
 </style>
+
