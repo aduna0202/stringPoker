@@ -1,4 +1,4 @@
-<template>  
+<template>
   <div class="fullScreen" :style="bgImg">
 
     <pay-table v-show="payTableOpen" v-on:updateBonus="updateBonus()" v-bind:baseBetValue="cash.coinValue * cash.base_coin_cost"></pay-table>
@@ -11,6 +11,23 @@
     <water-mark1 :style="{ 'display': showWater2 ? 'block' : 'none' }"></water-mark1>
     <water-mark2 :style="{ 'display': showWater ? 'block' : 'none' }"></water-mark2>
     <water-mark3></water-mark3>
+
+    <div class="cardArea stringCard" :style="{ display: (newBonus && stage.newBonus) ? 'block' : 'none' }">
+      <div class="mainCards">
+        <div v-if="discardedStringCard !== ''" class='cSize flip-container flip c5Pos fadeOut'>
+          <div class="flipper ">
+            <div class='back' :class="discardedStringCard"></div>
+          </div>
+          <div style="padding-top:42%; margin-left:-20%; text-align:center; position: absolute; width:140%;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30">
+              <rect style="fill:#FFE401; stroke:#BB2601; stroke-width:3;" x="20" y="5" rx="5" width="60" height="20" />
+              <text text-anchor="middle" font-weight="900" font-size="12" x="50" y="18.5" fill="#000000" opacity="1">
+                Discard</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div v-if="option.plusMode" id="note" class="cardArea stringCard"
       :style="{ display: (results.bonus[stage.activeHand].counter > 0) ? 'block' : 'none' }">
@@ -51,23 +68,23 @@
     </div>
 
 
-    <card :class="['stringRow2', handFocusClass(2)]" v-for="(c, i) in stringCards2.deal" v-bind:cardPosition="sPos[i]" v-bind:showCard="c"
+    <card :class="['stringRow2', handDimClass(2)]" v-for="(c, i) in stringCards2.deal" v-bind:cardPosition="sPos[i]" v-bind:showCard="c"
       v-bind:flip="stringCards2.flip[i]" v-bind:cardNum="i" v-bind:cardType="'stringCards2'"
       v-bind:held="stringCards2.held[i]" v-bind:fadeOut="false" v-bind:cardBack="cardBack"></card>
-    <card :class="['primaryRow2', handFocusClass(2)]" v-for="(c, i) in primaryCards2.deal" v-bind:cardPosition="cPos[i]" v-bind:showCard="c"
+    <card :class="['primaryRow2', handDimClass(2)]" v-for="(c, i) in primaryCards2.deal" v-bind:cardPosition="cPos[i]" v-bind:showCard="c"
       v-bind:flip="primaryCards2.flip[i]" v-bind:cardNum="i" v-bind:cardType="'primaryCards2'"
       v-bind:held="primaryCards2.held[i]" v-bind:fadeOut="primaryCards2.fade[i]" v-bind:cardBack="cardBack"></card>
 
 
-    <card :class="['stringRow1', handFocusClass(1)]" v-for="(c, i) in stringCards1.deal" v-bind:cardPosition="sPos[i]" v-bind:showCard="c"
+    <card :class="['stringRow1', handDimClass(1)]" v-for="(c, i) in stringCards1.deal" v-bind:cardPosition="sPos[i]" v-bind:showCard="c"
       v-bind:flip="stringCards1.flip[i]" v-bind:cardNum="i" v-bind:cardType="'stringCards1'"
       v-bind:held="stringCards1.held[i]" v-bind:fadeOut="false" v-bind:cardBack="cardBack"></card>
-    <card :class="['primaryRow1', handFocusClass(1)]" v-for="(c, i) in primaryCards1.deal" v-bind:cardPosition="cPos[i]" v-bind:showCard="c"
+    <card :class="['primaryRow1', handDimClass(1)]" v-for="(c, i) in primaryCards1.deal" v-bind:cardPosition="cPos[i]" v-bind:showCard="c"
       v-bind:flip="primaryCards1.flip[i]" v-bind:cardNum="i" v-bind:cardType="'primaryCards1'"
       v-bind:held="primaryCards1.held[i]" v-bind:fadeOut="primaryCards1.fade[i]" v-bind:cardBack="cardBack"></card>
 
 
-    <card :class="handFocusClass(0)" v-for="(c, i) in stringCards0.deal" v-bind:cardPosition="sPos[i]" v-bind:showCard="c"
+    <card :class="handDimClass(0)" v-for="(c, i) in stringCards0.deal" v-bind:cardPosition="sPos[i]" v-bind:showCard="c"
       v-bind:flip="stringCards0.flip[i]" v-bind:cardNum="i" v-bind:cardType="'stringCards'"
       v-bind:held="stringCards0.held[i]" v-bind:fadeOut="results.bonus[0].nonBonusCards" v-bind:cardBack="cardBack"></card>
 
@@ -106,7 +123,7 @@
 
 
 
-    <card :class="handFocusClass(0)" v-for="(c, i) in primaryCards0.deal" v-bind:cardPosition="cPos[i]" v-bind:showCard="c"
+    <card :class="handDimClass(0)" v-for="(c, i) in primaryCards0.deal" v-bind:cardPosition="cPos[i]" v-bind:showCard="c"
       v-bind:flip="primaryCards0.flip[i]" v-bind:cardNum="i" v-bind:cardType="'primaryCards'"
       v-bind:held="primaryCards0.held[i]" v-bind:fadeOut="primaryCards0.fade[i]" v-bind:cardBack="cardBack"></card>
 
@@ -153,7 +170,7 @@
     </div>
 
     <div id="draw" class="btnHeight"
-      :style="{ display: stage.primaryCardsDealt && !stage.drawS2Cards ? 'block' : 'none' }">
+      :style="{ display: (stage.primaryCardsDealt && !stage.drawS2Cards && !stage.newRound && !stage.newGame) ? 'block' : 'none' }">
       <div class="btnBase" v-on:click="draw">
         <btn-right-draw></btn-right-draw>
       </div>
@@ -340,6 +357,8 @@ var stringTests = [
   { cards: ["H13", "C8", "D13"], desc: "pair 3" }
 ];
 
+//console.log(dealer.getMultiply());
+
 export default {
   name: "app",
   components: {
@@ -401,8 +420,9 @@ export default {
         lockBet: false,
         roundEnds: false,
         activeHand: 0,
-        handFocusActive: false,
-        handFocusRelease: false,
+        activeHands: [0, 1, 2],
+        pendingBonusHands: [],
+        holdSyncEnabled: true,
         mirrorHolds: false,
         inBonusRound: false
       },
@@ -447,7 +467,8 @@ export default {
       plusOne: false,
       holdHeldLabel: "HOLD",
       stringWinText: ['', '', ''],
-      originalHolds: Array(5).fill(false)
+      originalHolds: Array(5).fill(false),
+      bonusEligible: [false, false, false]
     };
   },
   computed: {
@@ -474,14 +495,8 @@ export default {
     }
   },
   methods: {
-    handFocusClass(handNum) {
-      if (!this.stage.handFocusActive) {
-        if (this.stage.handFocusRelease) {
-          return "handFocusRelease";
-        }
-        return "";
-      }
-      return handNum === this.stage.activeHand ? "handFocusActive" : "handFocusDim";
+    handDimClass(handNum) {
+      return this.stage.inBonusRound && this.stage.activeHand !== handNum ? "handDimmed" : "";
     },
     updateBonus() {
       this.playChipClick();
@@ -500,6 +515,21 @@ export default {
       this.playChipClick();
       this.cash.coinValue = this.cash.coinOptions[this.cash.activeCoinOption];
     },
+    removeRevCards(handNum) {
+      var firstCard = this.slideOptions[this.originalSlide][handNum],
+        lastCard = firstCard + 4;
+      for (var s = 0; s < this.showMainCard.length; s++) {
+        if (s < firstCard || s > lastCard) {
+          this.showMainCard.splice(s, 1, false);
+        }
+      }
+      this.playDealSound();
+      return {
+        lCard: lastCard,
+        fCard: firstCard
+      };
+    },
+
     openInfoBox() {
       this.infoBoxOpen = true;
       document.getElementById("infoFrame").style.zIndex = "1";
@@ -518,30 +548,17 @@ export default {
         this.stage.keepPlaying ||
         (this.option.alwaysString && !this.stage.newRound)
       ) {
-        const handNum = this.stage.activeHand;
+        const handsToUpgrade = this.stage.pendingBonusHands.slice();
+        // Hold mirroring is only for the opening pre-bonus deal.
+        this.stage.holdSyncEnabled = false;
+        this.stage.mirrorHolds = false;
         this.stage.keepPlaying = false;
         this.stage.newRound = false;
         this.stage.inBonusRound = true;
 
-        setTimeout(() => {
-          this.showNewBonus(
-            autoPick.bestStringHand(
-              this.allPrimaryCards[handNum].specs,
-              this.allStringCards[handNum].specs,
-              this.results.bonus[handNum].bonus + (this.option.plusMode ? this.results.bonus[handNum].counter : 0)
-            ),
-            handNum
-          );
-          var pause1 = 4500,
-            pause2 = 700;
-          setTimeout(() => {
-            this.partialResetHand(handNum);
-            setTimeout(() => {
-              primaryDecks[handNum].newDeck();
-              this.dealPrimaryCards(handNum, true);
-            }, pause2);
-          }, pause1);
-        }, 200);
+        this.upgradePendingHands(handsToUpgrade, () => {
+          this.startNextCycleFromPending();
+        });
       } else if (this.stage.newRound) {
         this.stage.newGame = false;
         this.reset();
@@ -566,8 +583,12 @@ export default {
       stringDecks[2].newDeck();
 
       this.stage.newRound = false;
-      this.stage.handFocusActive = false;
-      this.stage.handFocusRelease = false;
+      this.stage.inBonusRound = false;
+      this.stage.activeHands = [0, 1, 2];
+      this.stage.pendingBonusHands = [];
+      this.stage.holdSyncEnabled = true;
+      this.stage.activeHand = 0;
+      this.bonusEligible = [false, false, false];
       this.results.bonus[0].reason = "";
       this.results.bonus[1].reason = "";
       this.results.bonus[2].reason = "";
@@ -584,6 +605,10 @@ export default {
         this.stringCards1.flip.splice(i, 1, false);
         this.stringCards2.deal.splice(i, 1, false);
         this.stringCards2.flip.splice(i, 1, false);
+      }
+
+      for (let h = 0; h < 3; h++) {
+        this.setHandFaded(h, false);
       }
 
       for (let i = 0; i < this.stringCards0.specs.length; i++) {
@@ -610,7 +635,7 @@ export default {
 
     draw() {
       const handNum = this.stage.activeHand;
-      if (!this.stage.inBonusRound) {
+      if (this.stage.holdSyncEnabled) {
         this.originalHolds = this.allPrimaryCards[handNum].held.slice();
       }
       this.stage.drawS2Cards = true;
@@ -669,7 +694,9 @@ export default {
       }, 200 * totalRemove + 500);
     },
     dealPrimaryCards(targetHand, ongoingGame) {
-      var handNums = targetHand === 'all' ? [0, 1, 2] : [targetHand];
+      var handNums = targetHand === 'all'
+        ? [0, 1, 2]
+        : (Array.isArray(targetHand) ? targetHand.slice() : [targetHand]);
       for (let i = 0; i < 5; i++) {
         setTimeout(() => {
           handNums.forEach(h => {
@@ -692,13 +719,8 @@ export default {
         this.results.main[handNum].payout;
 
       this.stage.results.splice(handNum, 1, true);
-      if (this.results.main[handNum].reward > 0 || this.option.alwaysString) {
-        this.stage.keepPlaying = true;
-        this.stage.lockBet = true;
-        this.stage.showWin = true;
-      } else {
-        this.advanceHand(handNum);
-      }
+      const isWinner = this.results.main[handNum].reward > 0 || this.option.alwaysString;
+      this.bonusEligible.splice(handNum, 1, isWinner);
 
       var currentWin =
         this.results.main[handNum].reward *
@@ -711,25 +733,125 @@ export default {
       this.stringWinText.splice(handNum, 1, prevText === '' ? winStr : prevText + ' + ' + winStr);
 
       bus.$emit("updateCashDisplay", this.cash);
-    },
-    advanceHand(handNum) {
-      if (handNum < 2) {
-        setTimeout(() => {
-          this.transitionToHand(handNum + 1);
-        }, 800);
-      } else {
-        this.stage.newGame = true;
-        this.stage.newRound = true;
-        this.stage.lockBet = false;
-        this.stage.roundEnds = true;
-        this.stage.handFocusActive = false;
-        this.stage.handFocusRelease = true;
-        setTimeout(() => {
-          this.stage.handFocusRelease = false;
-        }, 250);
-        this.cash.balance = this.cash.balance + this.cash.win;
-        bus.$emit("updateCashDisplay", this.cash);
+
+      const nextHand = this.getNextUnresolvedActiveHand();
+      if (nextHand > -1) {
+        this.transitionToHand(nextHand);
+        return;
       }
+
+      const winners = this.stage.activeHands.filter(h => this.bonusEligible[h]);
+      if (winners.length > 0) {
+        this.stage.pendingBonusHands = winners.slice();
+        this.stage.activeHand = winners[0];
+        this.stage.keepPlaying = true;
+        this.stage.lockBet = true;
+        this.stage.showWin = true;
+      } else {
+        this.finishRound();
+      }
+    },
+    finishRound() {
+      this.stage.inBonusRound = false;
+      this.stage.newGame = true;
+      this.stage.newRound = true;
+      this.stage.keepPlaying = false;
+      this.stage.lockBet = false;
+      this.stage.roundEnds = true;
+      this.stage.holdSyncEnabled = false;
+      this.cash.balance = this.cash.balance + this.cash.win;
+      bus.$emit("updateCashDisplay", this.cash);
+    },
+    getNextActiveHand(currentHand) {
+      const idx = this.stage.activeHands.indexOf(currentHand);
+      if (idx < 0 || idx >= this.stage.activeHands.length - 1) {
+        return -1;
+      }
+      return this.stage.activeHands[idx + 1];
+    },
+    getNextUnresolvedActiveHand() {
+      for (let i = 0; i < this.stage.activeHands.length; i++) {
+        const handNum = this.stage.activeHands[i];
+        if (!this.stage.results[handNum]) {
+          return handNum;
+        }
+      }
+      return -1;
+    },
+    setHandFaded(handNum, faded) {
+      for (let i = 0; i < 5; i++) {
+        this.allPrimaryCards[handNum].fade.splice(i, 1, faded);
+      }
+    },
+    prepareNextCycle(activeHands) {
+      for (let h = 0; h < 3; h++) {
+        const keepHand = activeHands.indexOf(h) > -1;
+        if (keepHand) {
+          // Clear labels only for hands being re-dealt in the next cycle.
+          this.stage.results.splice(h, 1, false);
+          for (let i = 0; i < 5; i++) {
+            this.allPrimaryCards[h].specs.splice(i, 1, "");
+            this.allPrimaryCards[h].deal.splice(i, 1, false);
+            this.allPrimaryCards[h].held.splice(i, 1, false);
+            this.allPrimaryCards[h].flip.splice(i, 1, false);
+            this.allPrimaryCards[h].fade.splice(i, 1, false);
+          }
+        } else {
+          this.setHandFaded(h, true);
+        }
+      }
+      this.holds.forEach(h => { h.active = false; });
+      this.holdHeldLabel = "HOLD";
+      this.stage.primaryCardsDealt = false;
+      this.stage.drawS2Cards = false;
+      this.stage.mirrorHolds = false;
+      this.stage.newBonus = false;
+      this.bonusEligible = [false, false, false];
+    },
+    upgradePendingHands(hands, done) {
+      if (hands.length === 0) {
+        done();
+        return;
+      }
+
+      const handNum = hands[0];
+      this.stage.activeHand = handNum;
+
+      this.showNewBonus(
+        autoPick.bestStringHand(
+          this.allPrimaryCards[handNum].specs,
+          this.allStringCards[handNum].specs,
+          this.results.bonus[handNum].bonus + (this.option.plusMode ? this.results.bonus[handNum].counter : 0)
+        ),
+        handNum,
+        () => {
+          setTimeout(() => {
+            this.upgradePendingHands(hands.slice(1), done);
+          }, 250);
+        }
+      );
+    },
+    startNextCycleFromPending() {
+      const survivingHands = this.stage.pendingBonusHands.slice();
+      this.stage.pendingBonusHands = [];
+      this.stage.inBonusRound = false;
+
+      if (survivingHands.length === 0) {
+        this.finishRound();
+        return;
+      }
+
+      this.stage.activeHands = survivingHands.slice();
+      this.stage.activeHand = survivingHands[0];
+      this.prepareNextCycle(survivingHands);
+
+      survivingHands.forEach(h => {
+        primaryDecks[h].newDeck();
+      });
+
+      setTimeout(() => {
+        this.dealPrimaryCards(survivingHands, false);
+      }, 350);
     },
     transitionToHand(handNum) {
       this.stage.activeHand = handNum;
@@ -737,10 +859,24 @@ export default {
       this.stage.primaryCardsDealt = false;
       this.holdHeldLabel = "HOLD";
 
-      // Copy holds from hand 0's original draw-time snapshot
+      // In bonus flow, each hand should be played manually by the user.
+      if (!this.stage.holdSyncEnabled) {
+        for (let i = 0; i < 5; i++) {
+          this.allPrimaryCards[handNum].flip.splice(i, 1, true);
+          this.holds[i].active = this.allPrimaryCards[handNum].held[i];
+        }
+        this.stage.primaryCardsDealt = true;
+        this.stage.mirrorHolds = false;
+        return;
+      }
+
+      // During opening pre-bonus play, copy player holds to sibling hands.
+      // Once bonus flow starts, each hand plays independently.
       var removedCardsIndex = [];
       for (let i = 0; i < 5; i++) {
-        const wasHeld = this.originalHolds[i];
+        const wasHeld = this.stage.holdSyncEnabled
+          ? this.originalHolds[i]
+          : this.allPrimaryCards[handNum].held[i];
         this.allPrimaryCards[handNum].held.splice(i, 1, wasHeld);
         this.holds[i].active = wasHeld;
         if (!wasHeld) { removedCardsIndex.push(i); }
@@ -783,7 +919,7 @@ export default {
         });
       }, 200 * cardsRemoved + 500);
     },
-    showNewBonus(newBonus, handNum) {
+    showNewBonus(newBonus, handNum, done) {
       if (typeof newBonus.bonus === "number") {
         this.newBonus = true;
         var plusOne = "";
@@ -800,7 +936,7 @@ export default {
           this.allStringCards[handNum].deal.splice(newBonus.removeStringCardNum, 1, false);
           this.allPrimaryCards[handNum].fade.splice(newBonus.pCardNumSwap, 1, true);
           setTimeout(() => {
-            stringDecks[handNum].upgradeStringCard(
+            this.discardedStringCard = stringDecks[handNum].upgradeStringCard(
               newBonus.removeStringCardNum,
               newBonus.pCardSwap
             );
@@ -821,6 +957,9 @@ export default {
               }
 
               this.stage.newBonus = true;
+              if (done) {
+                done();
+              }
             }, 500);
           }, 500);
         }, 1000);
@@ -829,6 +968,9 @@ export default {
           "no equal or better bonus found - keeping the string cards!";
         this.newBonus = false;
         this.stage.newBonus = true;
+        if (done) {
+          done();
+        }
       }
     },
     updateHold(i) {
@@ -837,10 +979,13 @@ export default {
         const newHeld = !this.allPrimaryCards[handNum].held[i];
         this.allPrimaryCards[handNum].held.splice(i, 1, newHeld);
         this.holds[i].active = newHeld;
-        // Mirror hold flip to hands 1 and 2 during the initial deal of hand 0
-        if (this.stage.mirrorHolds) {
-          this.allPrimaryCards[1].flip.splice(i, 1, newHeld);
-          this.allPrimaryCards[2].flip.splice(i, 1, newHeld);
+        // Mirror hold flip to the currently active group during mirrored deals.
+        if (this.stage.mirrorHolds && this.stage.holdSyncEnabled) {
+          this.stage.activeHands.forEach((h) => {
+            if (h !== handNum) {
+              this.allPrimaryCards[h].flip.splice(i, 1, newHeld);
+            }
+          });
         }
         this.playBtnSound();
       }
@@ -848,6 +993,7 @@ export default {
     reset(partial) {
       if (partial) {
         this.partialReset();
+        //  console.log("partial reset!");
       } else {
         this.partialReset();
         this.fullReset();
@@ -899,8 +1045,9 @@ export default {
     fullReset() {
       this.plusOne = false;
       this.stage.activeHand = 0;
-      this.stage.handFocusActive = false;
-      this.stage.handFocusRelease = false;
+      this.stage.activeHands = [0, 1, 2];
+      this.stage.pendingBonusHands = [];
+      this.stage.holdSyncEnabled = true;
       this.stage.mirrorHolds = false;
       this.soundClearCards.play();
       this.showWater = true;
@@ -922,9 +1069,11 @@ export default {
       this.stage.inBonusRound = false;
       this.stringWinText = ['', '', ''];
       this.originalHolds = Array(5).fill(false);
+      this.bonusEligible = [false, false, false];
 
       this.newBonus = false;
       this.holdReason = "";
+      this.discardedStringCard = "";
       bus.$emit("resetHold", {
         cardType: "primaryCards",
         hold: false
@@ -1010,7 +1159,7 @@ export default {
                 this.results.bonus[2].fill = stringResults2.fill;
 
                 setTimeout(() => {
-                  this.dealPrimaryCards('all');
+                  this.dealPrimaryCards(this.stage.activeHands, false);
                 }, 500);
               }, 300);
             }
@@ -1020,25 +1169,32 @@ export default {
       });
     },
     flipPrimaryCards(initialDelay, cards, swapComplete, ongoingGame, targetHand) {
-      var isInitialDeal = (targetHand === 'all' || targetHand === undefined);
-      var handNums = isInitialDeal ? [0, 1, 2] : [targetHand];
+      var isGroupDeal = (targetHand === 'all' || targetHand === undefined || Array.isArray(targetHand));
+      var handNums = targetHand === 'all'
+        ? [0, 1, 2]
+        : (Array.isArray(targetHand) ? targetHand.slice() : [targetHand]);
+      var sourceHand = handNums[0];
       _.forEach(cards, (c, i, a) => {
         if (i <= a.length - 1) {
-          if (isInitialDeal) {
-            // Get card from deck 0 only; mirror same value to decks 1 and 2
-            if (this.allPrimaryCards[0].specs[c] === "") {
-              primaryDecks[0].getCard(c, this.selectedPrimary, "primaryCards");
+          if (isGroupDeal) {
+            // Get card from source hand only; mirror same value to the rest of the active hands.
+            if (this.allPrimaryCards[sourceHand].specs[c] === "") {
+              primaryDecks[sourceHand].getCard(c, sourceHand === 0 ? this.selectedPrimary : [], "primaryCards");
             }
-            var cardValue = this.allPrimaryCards[0].specs[c];
-            [1, 2].forEach(h => {
-              this.allPrimaryCards[h].specs.splice(c, 1, cardValue);
-              // Remove mirrored card from deck so independent draws work later
-              var deckIdx = primaryDecks[h].deck.indexOf(cardValue);
-              if (deckIdx > -1) { primaryDecks[h].deck.splice(deckIdx, 1); }
+            var cardValue = this.allPrimaryCards[sourceHand].specs[c];
+            handNums.forEach(h => {
+              if (h !== sourceHand) {
+                this.allPrimaryCards[h].specs.splice(c, 1, cardValue);
+                // Remove mirrored card from each hand deck so later swaps remain independent.
+                var deckIdx = primaryDecks[h].deck.indexOf(cardValue);
+                if (deckIdx > -1) { primaryDecks[h].deck.splice(deckIdx, 1); }
+              }
+              bus.$emit("cardsUpdated", {
+                newCard: cardValue,
+                cardNum: c,
+                cardType: h === 0 ? "primaryCards" : "primaryCards" + h
+              });
             });
-            bus.$emit("cardsUpdated", { newCard: cardValue, cardNum: c, cardType: "primaryCards" });
-            bus.$emit("cardsUpdated", { newCard: cardValue, cardNum: c, cardType: "primaryCards1" });
-            bus.$emit("cardsUpdated", { newCard: cardValue, cardNum: c, cardType: "primaryCards2" });
           } else {
             var h = handNums[0];
             if (this.allPrimaryCards[h].specs[c] === "") {
@@ -1051,9 +1207,9 @@ export default {
             });
           }
           setTimeout(() => {
-            if (isInitialDeal) {
-              // Only flip hand 0 face-up; hands 1 and 2 stay face-down
-              this.allPrimaryCards[0].flip.splice(c, 1, true);
+            if (isGroupDeal) {
+              // Only flip source hand face-up; other active hands stay face-down.
+              this.allPrimaryCards[sourceHand].flip.splice(c, 1, true);
             } else {
               handNums.forEach(h => {
                 this.allPrimaryCards[h].flip.splice(c, 1, true);
@@ -1061,24 +1217,21 @@ export default {
             }
             this.playFlipSound();
             if (i === a.length - 1) {
-              this.stage.handFocusActive = false;
-              this.stage.handFocusRelease = false;
               setTimeout(() => {
-                this.stage.handFocusActive = true;
-                setTimeout(() => {
-                  this.stage.primaryCardsDealt = true;
-                  this.showWater2 = false;
-                  if (isInitialDeal) {
-                    this.stage.mirrorHolds = true;
-                  }
-                  if (ongoingGame) {
-                    this.stage.drawS2Cards = false;
-                  }
-                  if (swapComplete) {
-                    this.analyzeResults(this.stage.activeHand);
-                  }
-                }, 850);
-              }, 60);
+                this.stage.primaryCardsDealt = true;
+                this.showWater2 = false;
+                if (isGroupDeal) {
+                  this.stage.activeHands = handNums.slice();
+                  this.stage.activeHand = sourceHand;
+                  this.stage.mirrorHolds = true;
+                }
+                if (ongoingGame) {
+                  this.stage.drawS2Cards = false;
+                }
+                if (swapComplete) {
+                  this.analyzeResults(handNums[0]);
+                }
+              }, 300);
             }
           }, initialDelay);
           initialDelay = initialDelay + 100;
@@ -1369,6 +1522,11 @@ body {
   width: 60%;
 }
 
+.handDimmed {
+  opacity: 0.3;
+  filter: saturate(0.45) brightness(0.8);
+}
+
 .primaryResultLabel {
   position: absolute;
   left: 0;
@@ -1390,41 +1548,6 @@ body {
   position: absolute;
 }
 
-.handFocusDim:not(.fadeOut) {
-  opacity: 0.28;
-  filter: saturate(0.45) brightness(0.75);
-  transform: scale(0.96);
-  transition: opacity 0.35s ease, filter 0.35s ease, transform 0.35s ease;
-}
-
-.handFocusActive:not(.fadeOut) {
-  opacity: 1;
-  filter: none;
-  transform: scale(1);
-  
-  transition: opacity 0.35s ease, filter 0.35s ease, transform 0.35s ease;
-}
-
-.handFocusRelease:not(.fadeOut) {
-  opacity: 1;
-  filter: none;
-  transform: scale(1);
-  transition: opacity 0.25s ease, filter 0.25s ease, transform 0.25s ease;
-}
-
-.handFocusActive .cSize:not(.cardAnimation-enter-active):not(.cardAnimation-leave-active) {
-  animation: activeHandFocusIn 0.75s ease-out;
-}
-
-@keyframes activeHandFocusIn {
-  0% {
-    filter: drop-shadow(0 0 0.25rem rgba(255, 228, 1, 0.7));
-  }
-  100% {
-    filter: drop-shadow(0 0 0 rgba(255, 228, 1, 0));
-  }
-}
-
 @media all and (min-aspect-ratio: 970 / 600) {
   /* LANDSCAPE - center portrait game window */
   #app {
@@ -1436,7 +1559,7 @@ body {
     flex-shrink: 0;
   }
   /* Portrait layout values */
-  .stringGroup0, .stringGroup1, .stringGroup2 { width: 42%; left: 33.5%; }
+  .stringGroup0, .stringGroup1, .stringGroup2 { width: 75%; left: 23.5%; }
   .stringGroup0 { top: 64%; }
   .stringGroup1 { top: 42%; }
   .stringGroup2 { top: 20%; }
@@ -1458,10 +1581,9 @@ body {
     flex-shrink: 0;
   }
   /* Portrait layout values */
-  .stringGroup0, .stringGroup1, .stringGroup2 { width: 50%; left: 33.5%; }
+  .stringGroup0, .stringGroup1, .stringGroup2 { width: 75%; left: 23.5%; }
   .stringGroup0 { top: 64%; }
   .stringGroup1 { top: 42%; }
   .stringGroup2 { top: 20%; }
 }
 </style>
-
